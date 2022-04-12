@@ -80,8 +80,8 @@ struct GridSquare
 };
 
 
-/////////////////////////////////////////////////////////////////////
 // Function prototypes for drawing to the VGA display
+/////////////////////////////////////////////////////////////////////
 
 //Plots a single pixel at the given coordinates with the given color
 void plot_pixel(int x, int y, short int line_colour);
@@ -121,11 +121,12 @@ void draw_queen(int xCoord, int yCoord);
 
 //Draws a king on the chess board
 void draw_king(int xCoord, int yCoord);
+
 /////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////
 // Function prototypes for the chess game
+/////////////////////////////////////////////////////////////////////
 
 //Enters chess game loop
 void play_chess();
@@ -138,7 +139,6 @@ int * get_valid_moves(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoor
 
 //Checks if a move is valid
 int is_valid_move(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
-
 
 /////////////////////////////////////////////////////////////////////
 
@@ -154,6 +154,7 @@ int main(void)
 	struct GridSquare chessBoard[BOARD_SIZE][BOARD_SIZE];
 	
 	//initializes the chessBoard to default values
+    init_board(chessBoard);
     //Loop through chessboard and sets GridSquare to default values
 	for(int yCoord = 0; yCoord <= BOARD_SIZE-1; yCoord++){
         for(int xCoord = 0; xCoord <= BOARD_SIZE-1; xCoord++){
@@ -263,24 +264,17 @@ int main(void)
     }
 }
 
+
+// Function definitions for drawing to the VGA display
+/////////////////////////////////////////////////////////////////////
+
+//Plots a single pixel at the given coordinates with the given color
 void plot_pixel(int x, int y, short int line_color)
 {
     *(short int *)(pixel_buffer_start + (y << 10) + (x << 1)) = line_color;
 }
 
-void wait_for_vsync(){
-	volatile int *pixel_ctrl_ptr = (int *) 0xFF203020;
-	int status;
-	//launches the swap process
-	*pixel_ctrl_ptr = 1; //sets the S bit to 1 
-	//poll for the status bit
-	status = *(pixel_ctrl_ptr + 3); //OxFF20302C
-	while((status & 0x01) != 0){
-		status = *(pixel_ctrl_ptr + 3);
-	}//end while
-	
-}//end wait_for_vsync 
-
+//Clears the screen with the colour black
 void clear_screen()
 {
         int y, x;
@@ -290,6 +284,7 @@ void clear_screen()
                         plot_pixel (x, y, 0);
 }
 
+//Draws the chess board in its current state
 void draw_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]){
 	int y,x;
 	for (x = 40; x < 280; x++){
@@ -309,6 +304,24 @@ void draw_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]){
 	}
 }
 
+//Synchronizes the double buffering of the VGA display
+void wait_for_vsync(){
+	
+    volatile int *pixel_ctrl_ptr = (int *) 0xFF203020;
+	int status;
+	
+    //launches the swap process
+	*pixel_ctrl_ptr = 1; //sets the S bit to 1 
+	
+    //poll for the status bit
+	status = *(pixel_ctrl_ptr + 3); //OxFF20302C
+	while((status & 0x01) != 0){
+		status = *(pixel_ctrl_ptr + 3);
+	}
+	
+}
+
+//Draws the outline of the pieces on the chess board
 void draw_outline(){
 	int x, y;
 	for(x = 0; x <=320; x++){
@@ -319,3 +332,71 @@ void draw_outline(){
 		}
 	}
 }
+
+//Draws a single piece on the chess board
+void draw_piece(struct Piece piece) {
+    return ;
+}
+
+//Draws a single square on the chess board
+void draw_square(struct GridSquare square) {
+    return ;
+}
+
+//Draws a pawn on the chess board
+void draw_pawn(int xCoord, int yCoord) {
+    return ;
+}
+
+//Draws a knight on the chess board
+void draw_knight(int xCoord, int yCoord) {
+    return ;
+}
+
+//Draws a bishop on the chess board
+void draw_bishop(int xCoord, int yCoord) {
+    return ;
+}
+
+//Draws a rook on the chess board
+void draw_rook(int xCoord, int yCoord) {
+    return ;
+}
+
+//Draws a queen on the chess board
+void draw_queen(int xCoord, int yCoord) {
+    return ;
+}
+
+//Draws a king on the chess board
+void draw_king(int xCoord, int yCoord) {
+    return ;
+}
+
+/////////////////////////////////////////////////////////////////////
+
+
+// Function definitions for the chess game
+/////////////////////////////////////////////////////////////////////
+
+//Enters chess game loop
+void play_chess() {
+    return ;
+}
+
+//Initializes the chess board to default state
+void init_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+    return ;
+}
+
+//get valid moves for a piece
+int * get_valid_moves(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord) {
+    return ;
+}
+
+//Checks if a move is valid
+int is_valid_move(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
+    return ;
+}
+
+/////////////////////////////////////////////////////////////////////
