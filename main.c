@@ -38,6 +38,7 @@ const int CHAR_BUF_CTRL_BASE    =0xFF203030;
 
 // VGA colors
 const int WHITE                 =0xFFFF;
+const int BLACK                 =0x0000;
 const int YELLOW                =0xFFE0;
 const int RED                   =0xF800;
 const int GREEN                 =0x07E0;
@@ -94,35 +95,38 @@ void clear_screen();
 //Draws the chess board in its current state
 void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
+//Draws background outline of the chess board
+void draw_outline();
+
 //Synchronizes the double buffering of the VGA display
 void wait_for_vsync();
 
-//Draws the outline of the pieces on the chess board
-void draw_outline();
+//Draws all pieces on the chess board
+void draw_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Draws a single piece on the chess board
-void draw_piece(Piece piece);
+void draw_piece(Piece piece, int xCoord, int yCoord);
 
 //Draws a single square on the chess board
-void draw_square(GridSquare square);
+void draw_square(GridSquare square, int xCoord, int yCoord);
 
 //Draws a pawn on the chess board
-void draw_pawn(int xCoord, int yCoord);
+void draw_pawn(int piece_colour, int xCoord, int yCoord);
 
 //Draws a knight on the chess board
-void draw_knight(int xCoord, int yCoord);
+void draw_knight(int piece_colour, int xCoord, int yCoord);
 
 //Draws a bishop on the chess board
-void draw_bishop(int xCoord, int yCoord);
+void draw_bishop(int piece_colour, int xCoord, int yCoord);
 
 //Draws a rook on the chess board
-void draw_rook(int xCoord, int yCoord);
+void draw_rook(int piece_colour, int xCoord, int yCoord);
 
 //Draws a queen on the chess board
-void draw_queen(int xCoord, int yCoord);
+void draw_queen(int piece_colour, int xCoord, int yCoord);
 
 //Draws a king on the chess board
-void draw_king(int xCoord, int yCoord);
+void draw_king(int piece_colour, int xCoord, int yCoord);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -215,6 +219,7 @@ void clear_screen()
 {
         int y, x;
 
+        // loop through every pixel and set it to zero (black)
         for (x = 0; x < 320; x++)
                 for (y = 0; y < 240; y++)
                         plot_pixel (x, y, 0);
@@ -222,22 +227,34 @@ void clear_screen()
 
 //Draws the chess board in its current state
 void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
-	int y,x;
-	for (x = 40; x < 280; x++){
-		for (y = 0; y < 240; y++){
-		if((x < 70 && x > 40) || (x > 100 && x < 130) || (x > 160 && x < 190) || (x > 220 && x < 250)){//first column
-			if(y < 30 || (y > 60 && y < 90) || (y > 120 && y < 150) || (y > 180 && y < 210)){
-				plot_pixel(x,y, WHITE);
-			}
-		}
-		if((x > 70 && x < 100) || (x > 130 && x < 160) || (x > 190 && x < 220) || (x > 250 && x < 280)){
-			if((y > 30 && y < 60) || (y > 90 && y < 120) || (y > 150 && y < 180) || (y > 210)){
-			plot_pixel(x,y, WHITE);
-			}
-		}
-		}
+	
+    //Draws outline of the chess board
+    draw_outline();
 
-	}
+    //Draws the pieces on the chess board
+
+
+}
+
+//Draws background outline of the chess board
+void draw_outline() {
+    int x,y;
+
+    //Draws the outline of the chess board
+    for (x = 40; x < 280; x++){
+        for (y = 0; y < 240; y++){
+            if((x < 70 && x > 40) || (x > 100 && x < 130) || (x > 160 && x < 190) || (x > 220 && x < 250)){//first column
+                if(y < 30 || (y > 60 && y < 90) || (y > 120 && y < 150) || (y > 180 && y < 210)){
+                    plot_pixel(x,y, BLACK);
+                }
+            }
+            if((x > 70 && x < 100) || (x > 130 && x < 160) || (x > 190 && x < 220) || (x > 250 && x < 280)){
+                if((y > 30 && y < 60) || (y > 90 && y < 120) || (y > 150 && y < 180) || (y > 210)){
+                plot_pixel(x,y, BLACK);
+                }
+            }
+        }
+    }
 }
 
 //Synchronizes the double buffering of the VGA display
@@ -257,55 +274,73 @@ void wait_for_vsync(){
 	
 }
 
-//Draws the outline of the pieces on the chess board
-void draw_outline(){
-	int x, y;
-	for(x = 0; x <=320; x++){
-		for(y = 0; y < 240; y++){
-			if((x <= 40) || (x >= 280)){
-			plot_pixel(x,y,GREY);
-			}
-		}
-	}
+//Draws all pieces on the chess board
+void draw_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+    
+    //Loops through chess board and draws all pieces
+    for (int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+        for (int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            draw_piece(board[yCoord][xCoord].piece, yCoord, xCoord);
+        }
+    }
 }
 
 //Draws a single piece on the chess board
-void draw_piece(Piece piece) {
-    return ;
+void draw_piece(Piece piece, int xCoord, int yCoord) {
+    
+    //Checks to see which piece to draw and draws it
+    if (piece.piece_ID == PAWN) {
+        draw_pawn(piece.colour, xCoord, yCoord);
+    }
+    else if (piece.piece_ID == ROOK) {
+        draw_rook(piece.colour, xCoord, yCoord);
+    }
+    else if (piece.piece_ID == KNIGHT) {
+        draw_knight(piece.colour, xCoord, yCoord);
+    }
+    else if (piece.piece_ID == BISHOP) {
+        draw_bishop(piece.colour, xCoord, yCoord);
+    }
+    else if (piece.piece_ID == QUEEN) {
+        draw_queen(piece.colour, xCoord, yCoord);
+    }
+    else if (piece.piece_ID == KING) {
+        draw_king(piece.colour, xCoord, yCoord);
+    }
 }
 
 //Draws a single square on the chess board
-void draw_square(GridSquare square) {
+void draw_square(GridSquare square, int xCoord, int yCoord) {
     return ;
 }
 
 //Draws a pawn on the chess board
-void draw_pawn(int xCoord, int yCoord) {
+void draw_pawn(int piece_colour, int xCoord, int yCoord) {
     return ;
 }
 
 //Draws a knight on the chess board
-void draw_knight(int xCoord, int yCoord) {
+void draw_knight(int piece_colour, int xCoord, int yCoord) {
     return ;
 }
 
 //Draws a bishop on the chess board
-void draw_bishop(int xCoord, int yCoord) {
+void draw_bishop(int piece_colour, int xCoord, int yCoord) {
     return ;
 }
 
 //Draws a rook on the chess board
-void draw_rook(int xCoord, int yCoord) {
+void draw_rook(int piece_colour, int xCoord, int yCoord) {
     return ;
 }
 
 //Draws a queen on the chess board
-void draw_queen(int xCoord, int yCoord) {
+void draw_queen(int piece_colour, int xCoord, int yCoord) {
     return ;
 }
 
 //Draws a king on the chess board
-void draw_king(int xCoord, int yCoord) {
+void draw_king(int piece_colour, int xCoord, int yCoord) {
     return ;
 }
 
