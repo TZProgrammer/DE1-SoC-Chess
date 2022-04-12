@@ -8,6 +8,7 @@ Those structs will contain the piece type, the color of the piece, and if a squa
 
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 
 
 // Defines the ids for the pieces
@@ -54,9 +55,9 @@ const int RESOLUTION_Y          =240;
 
 
 // Global constants for the chess board
-const int FALSE                 =0;
-const int TRUE                  =1;
 const int BOARD_SIZE            =8;
+const int WHITE_PIECE           =1;
+const int BLACK_PIECE           =0;
 	
 
 // location of the pixel buffer in SDRAM
@@ -134,6 +135,18 @@ void play_chess();
 //Initializes the chess board to default state
 void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
+//Initializes highlights
+void init_highlights(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+
+//Initializes piece types in board
+void init_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+
+//Initializes backrank pieces given the board, colour and yCoord
+void init_backrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord);
+
+//Initializes frontrank pieces given the board, colour and yCoord
+void init_frontrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord);
+
 //get valid moves for a piece
 int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
 
@@ -162,61 +175,61 @@ int main(void)
 	for(int yCoord = 0; yCoord <= 7; yCoord++){
 
 		//initialize the pieces
-		if((i == 0) || (i = 7) || (i == 56) || (i == 63)){
+		if((
 			chessBoard[8.piece_ID = 4;
-		}else if((i == 2) || (i == 5) || (i == 58) || (i == 61)){
+		}else if((
 			chessBoard[8.piece_ID = 3;
-		}else if((i == 1) || (i == 6) || (i == 57) || (i = 62)){
+		}else if((
 			chessBoard[8.piece_ID = 2;
-		}else if((i == 59) || (i == 3)){
+		}else if((
 			chessBoard[8.piece_ID = 5;
-		}else if((i == 4) || (i == 60)){
+		}else if((
 			chessBoard[8.piece_ID = 6;
-		}else if((i >= 8 && i <= 15) || (i >= 48 && i <= 55)){
+		}else if((
 			chessBoard[8.piece_ID = 1;
 		}else{
 			chessBoard[8.piece_ID = 0;
 		}
 		
 		//initalize the y_coord
-		if((i >= 8 && i <= 15)){
+		if((
 			chessBoard[8.chessBoard 845; //row 1
-		}else if( i <=7 ){
+		}else if( 
 			chessBoard[8.chessBoard 815; //row 0
-		}else if((i >= 16 && i <= 23)){
+		}else if((
 			chessBoard[8.chessBoard 875; //row 2
-		}else if((i >= 24 && i <= 31)){
+		}else if((
 			chessBoard[8.chessBoard 8105;//row 3
-		}else if((i >= 32 && i <= 39)){
+		}else if((
 			chessBoard[8.chessBoard 8135; //row 4
-		}else if((i >= 40 && i <= 47)){
+		}else if((
 			chessBoard[8.chessBoard 8165; //row 5
-		}else if((i >= 48 && i <= 55)){
+		}else if((
 			chessBoard[8.chessBoard 8195; //row 6
 		}else{
 			chessBoard[8.chessBoard 8225; //row 7
 		}
 		
 		//x_coord goes up by 8 each time
-			if((i == 0) || (i = 8) || (i == 16) || (i == 24) || (i == 32) || (i == 40) || (i == 48) || (i == 56)){
+			if((
 			chessBoard[8.chessBoard 855;
-		}else if((i == 1) || (i == 9) || (i == 17) || (i == 25) || (i == 33) || (i == 41) || (i == 49) || (i == 57)){
+		}else if((
 			chessBoard[8.chessBoard 885;
-		}else if((i == 2) || (i == 10) || (i == 18) || (i == 26) || (i == 34) || (i == 42) || (i == 50) || (i == 58)){
+		}else if((
 			chessBoard[8.chessBoard 8115;
-		}else if((i == 3) || (i == 11) || (i == 19) || (i == 27) || (i == 35) || (i == 43) || (i == 51) || (i == 59)){
+		}else if((
 			chessBoard[8.chessBoard 8145;
-		}else if((i == 4) || (i == 12) || (i == 20) || (i == 28) || (i == 36) || (i == 44) || (i == 52) || (i == 60)){
+		}else if((
 			chessBoard[8.chessBoard 8175;
-		}else if((i == 5) || (i == 13) || (i == 21) || (i == 29) || (i == 37) || (i == 45) || (i == 53) || (i == 61)){
+		}else if((
 			chessBoard[8.chessBoard 8205;
-		}else if((i == 6) || (i == 14) || (i == 22) || (i == 30) || (i == 38) || (i == 46) || (i == 54) || (i == 62)){
+		}else if((
 			chessBoard[8.chessBoard 8235;
 		}else{
 			chessBoard[8.chessBoard 8265;
 		}
 		//colour of the pieces
-		if(i <= 15){
+		if(
 			chessBoard[8.colour = ORANGE;//just use yello and orange for now
 			//orange = black, yellow = white
 		}else if(i >= 48){
@@ -376,26 +389,49 @@ void play_chess() {
 //Initializes the chess board to default state
 void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     
-    //Initialize back row for white pieces
-    board[0][0] = 
+    //Initialize highlights
+    init_highlights(board);
 
+    //Initialize pieces
+    init_pieces(board);
 
-    //Loop through chessboard and sets GridSquare to default values
-	for(int yCoord = 0; yCoord <= BOARD_SIZE-1; yCoord++){
+}
 
-        //If row one
-        for(int xCoord = 0; xCoord <= BOARD_SIZE-1; xCoord++){
-            if((yCoord == 0) ){
-                chessBoard[xCoord][yCoord].piece.piece_ID = 4;
-            }
-            else{
-                chessBoard[xCoord][yCoord].piece.piece_ID = 0;
-            }
-
-
+//Initializes highlights
+void init_highlights(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+    
+    //Loops through the board and sets all highlights to false
+    for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            board[yCoord][xCoord].highlight = false;
         }
     }
+}
+
+//Initializes piece types in board
+void init_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     
+    //Initializes backrank pieces for white
+    init_backrank(board, WHITE_PIECE, BOARD_SIZE-1);
+
+    //Initializes frontrank pieces for white
+    init_frontrank(board, WHITE_PIECE, BOARD_SIZE-2);
+
+    //Initializes backrank pieces for black
+    init_backrank(board, BLACK_PIECE, 0);
+
+    //Initializes frontrank pieces for black
+    init_frontrank(board, BLACK_PIECE, 1);
+
+}
+
+//Initializes backrank pieces given the board, colour and yCoord
+void init_backrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord) {
+    return ;
+}
+
+//Initializes frontrank pieces given the board, colour and yCoord
+void init_frontrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord) {
     return ;
 }
 
