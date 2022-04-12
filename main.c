@@ -58,6 +58,7 @@ const int RESOLUTION_Y          =240;
 const int BOARD_SIZE            =8;
 const int WHITE_PIECE           =1;
 const int BLACK_PIECE           =0;
+const int EMPTY_PIECE          =-1;
 	
 
 // location of the pixel buffer in SDRAM
@@ -140,6 +141,9 @@ void init_highlights(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Initializes piece types in board
 void init_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+
+//Initializes empty squares in board
+void init_empty_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Initializes backrank pieces given the board, colour and yCoord
 void init_backrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord);
@@ -395,6 +399,9 @@ void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     //Initialize pieces
     init_pieces(board);
 
+    //Initialize empty squares
+    init_empty_squares(board);
+
 }
 
 //Initializes highlights
@@ -425,14 +432,69 @@ void init_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
 
 }
 
+//Initializes empty squares in board
+void init_empty_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+
+    //Sets constants for the empty squares
+    const int EMPTY_SPACE_BEGIN = 2;
+    const int EMPTY_SPACE_END = BOARD_SIZE - 3;
+
+    //Loops through the empty squares in the board
+    //Sets the piece type to EMPTY_SQUARE and piece color to EMPTY_PIECE
+    for(int yCoord = EMPTY_SPACE_BEGIN; yCoord <= EMPTY_SPACE_END; yCoord++) {
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            board[yCoord][xCoord].piece.piece_ID = EMPTY_SQUARE;
+            board[yCoord][xCoord].piece.piece_color = EMPTY_PIECE;
+        }
+    } 
+}
+
+
 //Initializes backrank pieces given the board, colour and yCoord
 void init_backrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord) {
-    return ;
+    
+    //Manually set pieces to starting position with corresponding colour
+    //Set up rook
+    board[yCoord][0].piece.piece_ID = ROOK;
+    board[yCoord][0].piece.colour = colour;
+
+    //Set up knight
+    board[yCoord][1].piece.piece_ID = KNIGHT;
+    board[yCoord][1].piece.colour = colour;
+
+    //Set up bishop
+    board[yCoord][2].piece.piece_ID = BISHOP;
+    board[yCoord][2].piece.colour = colour;
+
+    //Set up queen
+    board[yCoord][3].piece.piece_ID = QUEEN;
+    board[yCoord][3].piece.colour = colour;
+
+    //Set up king
+    board[yCoord][4].piece.piece_ID = KING;
+    board[yCoord][4].piece.colour = colour;
+
+    //Set up bishop
+    board[yCoord][5].piece.piece_ID = BISHOP;
+    board[yCoord][5].piece.colour = colour;
+
+    //Set up knight
+    board[yCoord][6].piece.piece_ID = KNIGHT;
+    board[yCoord][6].piece.colour = colour;
+
+    //Set up rook
+    board[yCoord][7].piece.piece_ID = ROOK;
+    board[yCoord][7].piece.colour = colour;
 }
 
 //Initializes frontrank pieces given the board, colour and yCoord
 void init_frontrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord) {
-    return ;
+    
+    //Loops through row at yCoord and set pieces to pawns of the correspending colour
+    for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+        board[yCoord][xCoord].piece.piece_ID = PAWN;
+        board[yCoord][xCoord].piece.colour = colour;
+    }
 }
 
 //get valid moves for a piece
