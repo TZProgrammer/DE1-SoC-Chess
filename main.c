@@ -166,7 +166,15 @@ void init_frontrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yC
 int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
 
 //Checks if a move is valid
-int is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+//Checks if square is empty
+bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
+
+//Gets player selected piece
+//Returns x and y indexes of the chess board array of the piece selected
+//If the input is invalid, loop until valid input is given
+int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -179,6 +187,9 @@ int x_to_pixel(int xCoord);
 
 //convert y index to y pixel coordinate
 int y_to_pixel(int yCoord);
+
+//gets inputs from switches
+int* get_input_from_switches();
 
 /////////////////////////////////////////////////////////////////////
 
@@ -510,8 +521,51 @@ int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int 
 }
 
 //Checks if a move is valid
-int is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
+bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
     return ;
+}
+
+//Checks if square is empty
+bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord) {
+
+    //Checks if the square is empty
+    if(board[yCoord][xCoord].piece.piece_ID == EMPTY_SQUARE) {
+        return true;
+    }
+    
+    return false;
+
+}
+
+//Gets player selected piece
+//Returns x and y indexes of the chess board array of the piece selected
+//If the input is invalid, loop until valid input is given
+int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+
+    //Initialize variables
+    int * selectedPiece = malloc(sizeof(int) * 2);
+    int xCoord = 0;
+    int yCoord = 0;
+
+    //Loop until valid input is given
+    while(true) {
+        
+        int* userInput = get_input_from_switches();
+
+        //Get x and y coordinates of the piece selected
+        xCoord = userInput[0];
+        yCoord = userInput[1];
+
+        //Check if the piece selected is valid
+        if(!is_empty_square(board, xCoord, yCoord)) {
+            selectedPiece[0] = xCoord;
+            selectedPiece[1] = yCoord;
+            break;
+        }
+    }
+
+    return selectedPiece;
+
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -530,6 +584,11 @@ int x_to_pixel(int xCoord){
 //pixel index will map to the top left most pixel of the square
 int y_to_pixel(int yCoord){
     return yCoord * SQUARE_SIZE;
+}
+
+//gets inputs from switches
+int* get_input_from_switches() {
+    return ;
 }
 
 /////////////////////////////////////////////////////////////////////
