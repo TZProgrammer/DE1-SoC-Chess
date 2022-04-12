@@ -56,10 +56,12 @@ const int RESOLUTION_Y          =240;
 
 
 // Global constants for the chess board
-const int BOARD_SIZE            =8;
-const int WHITE_PIECE           =1;
-const int BLACK_PIECE           =0;
-const int EMPTY_PIECE          =-1;
+const int BOARD_SIZE            = 8;
+const int WHITE_PIECE           = 1;
+const int BLACK_PIECE           = 0;
+const int WHITE_SQUARE          = 1;
+const int BLACK_SQUARE          = 0;
+const int EMPTY_PIECE           =-1;
 	
 
 // location of the pixel buffer in SDRAM
@@ -79,6 +81,7 @@ typedef struct Piece
 typedef struct GridSquare
 {
     Piece piece;
+    int colour;
     int highlighted;
 } GridSquare;
 
@@ -143,6 +146,9 @@ void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 //Initializes highlights
 void init_highlights(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
+//Initializes colours of the chess grid
+void init_colours(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+
 //Initializes piece types in board
 void init_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
@@ -160,6 +166,18 @@ int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int 
 
 //Checks if a move is valid
 int is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+/////////////////////////////////////////////////////////////////////
+
+
+// Function prototypes for helper functions
+/////////////////////////////////////////////////////////////////////
+
+//convert x index to x pixel coordinate
+int x_to_pixel(int xCoord);
+
+//convert y index to y pixel coordinate
+int y_to_pixel(int yCoord);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -288,6 +306,11 @@ void draw_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
 //Draws a single piece on the chess board
 void draw_piece(Piece piece, int xCoord, int yCoord) {
     
+    //if there is no piece, do nothing
+    if (piece.piece_ID == EMPTY_SQUARE) {
+        return;
+    }
+
     //Checks to see which piece to draw and draws it
     if (piece.piece_ID == PAWN) {
         draw_pawn(piece.colour, xCoord, yCoord);
@@ -376,6 +399,23 @@ void init_highlights(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
         for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
             board[yCoord][xCoord].highlighted = false;
+        }
+    }
+}
+
+//Initializes colours of the chess grid
+void init_colours(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
+
+    //Loops through all squares and sets the colour of the square
+    //Colour of the square is in a checkerboard pattern
+    for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            if((xCoord + yCoord) % 2 == 0) {
+                board[yCoord][xCoord].colour = WHITE_SQUARE;
+            }
+            else {
+                board[yCoord][xCoord].colour = BLACK_SQUARE;
+            }
         }
     }
 }
@@ -469,6 +509,22 @@ int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int 
 
 //Checks if a move is valid
 int is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
+    return ;
+}
+
+/////////////////////////////////////////////////////////////////////
+
+
+// Function prototypes for helper functions
+/////////////////////////////////////////////////////////////////////
+
+//convert x index to x pixel coordinate
+int x_to_pixel(int xCoord){
+    return ;
+}
+
+//convert y index to y pixel coordinate
+int y_to_pixel(int yCoord){
     return ;
 }
 
