@@ -108,6 +108,9 @@ void plot_pixel(int x, int y, short int line_colour);
 //Clears the screen with the colour black
 void clear_screen();
 
+//Set pixel buffer addresses
+void set_pixel_buffer_addresses();
+
 //Draws the chess board in its current state
 void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
@@ -231,8 +234,7 @@ int* get_input_from_switches();
 
 int main(void)
 {
-    volatile int * pixel_ctrl_ptr = (int *)PIXEL_BUF_CTRL_BASE;
-    
+
     // declares the chessBoard
 	GridSquare chessBoard[BOARD_SIZE][BOARD_SIZE];
     int currentTurn = WHITE_PIECE;
@@ -240,19 +242,9 @@ int main(void)
 	//initializes the chessBoard to default values
     init_board(chessBoard);
 	
-
-    /* set front pixel buffer to start of FPGA On-chip memory */
-    *(pixel_ctrl_ptr + 1) = FPGA_ONCHIP_BASE; // first store the address in the 
-                                        // back buffer
-    /* now, swap the front/back buffers, to set the front buffer location */
-    wait_for_vsync();
-    /* initialize a pointer to the pixel buffer, used by drawing functions */
-    pixel_buffer_start = *pixel_ctrl_ptr;
-    clear_screen(); // pixel_buffer_start points to the pixel buffer
-    /* set back pixel buffer to start of SDRAM memory */
-    *(pixel_ctrl_ptr + 1) = SDRAM_BASE;
-    pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer
-    clear_screen(); // pixel_buffer_start points to the pixel buffer
+    //initializes pixel buffer addresses
+    set_pixel_buffer_addresses();
+    
 
     //loop while game is not over and play game
     while (!is_game_over(chessBoard, currentTurn)){
@@ -295,6 +287,32 @@ void clear_screen()
         for (x = 0; x < RESOLUTION_X; x++)
                 for (y = 0; y < RESOLUTION_Y; y++)
                         plot_pixel (x, y, 0);
+}
+
+//Set pixel buffer addresses
+void set_pixel_buffer_addresses(){
+
+    volatile int * pixel_ctrl_ptr = (int *)PIXEL_BUF_CTRL_BASE;
+
+    //Set front pixel buffer to start of FPGA On-chip memory
+    *(pixel_ctrl_ptr + 1) = FPGA_ONCHIP_BASE;
+
+    //Swap the front/back buffers, to set the front buffer location
+    wait_for_vsync();
+
+    //Initialize a pointer to the pixel buffer, used by drawing functions
+    pixel_buffer_start = *pixel_ctrl_ptr;
+
+    //Reset screen to black on this buffer
+    clear_screen();
+
+    //Set back pixel buffer to start of SDRAM memory
+    *(pixel_ctrl_ptr + 1) = SDRAM_BASE;
+    pixel_buffer_start = *(pixel_ctrl_ptr + 1);
+
+    //Clear screen on back buffer
+    clear_screen();
+
 }
 
 //Draws the chess board in its current state
