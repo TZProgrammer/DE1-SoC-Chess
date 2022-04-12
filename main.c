@@ -171,10 +171,15 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
 //Checks if square is empty
 bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
 
-//Gets player selected piece
+//Gets player selected piece from user input
 //Returns x and y indexes of the chess board array of the piece selected
 //If the input is invalid, loop until valid input is given
 int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+
+//Gets player move from user input
+//Returns x and y indexes of the chess board array of the square selected
+//If the input is invalid, loop until valid input is given
+int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, int startingLocationY);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -537,7 +542,7 @@ bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int y
 
 }
 
-//Gets player selected piece
+//Gets player selected piece from user inpu
 //Returns x and y indexes of the chess board array of the piece selected
 //If the input is invalid, loop until valid input is given
 int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
@@ -565,6 +570,38 @@ int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     }
 
     return selectedPiece;
+
+}
+
+//Gets player move from user input
+//Returns x and y indexes of the chess board array of the square selected
+//If the input is invalid, loop until valid input is given
+int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, int startingLocationY) {
+
+    //Initialize variables
+    int * move = malloc(sizeof(int) * 2);
+    int xCoord = 0;
+    int yCoord = 0;
+
+    //Loop until valid input is given
+    while(true) {
+        
+        int* userInput = get_input_from_switches();
+
+        //Get x and y coordinates of the square selected
+        xCoord = userInput[0];
+        yCoord = userInput[1];
+
+        //Check if the move is valid
+        if(is_valid_move(board, startingLocationX, startingLocationY, xCoord, yCoord)) {
+            move[0] = xCoord;
+            move[1] = yCoord;
+            break;
+        }
+    }
+
+    return move;
+
 
 }
 
