@@ -172,76 +172,6 @@ int main(void)
 	
 	//initializes the chessBoard to default values
     init_board(chessBoard);
-
-    
-
-
-	for(int yCoord = 0; yCoord <= 7; yCoord++){
-
-		//initialize the pieces
-		if((
-			chessBoard[8.piece_ID = 4;
-		}else if((
-			chessBoard[8.piece_ID = 3;
-		}else if((
-			chessBoard[8.piece_ID = 2;
-		}else if((
-			chessBoard[8.piece_ID = 5;
-		}else if((
-			chessBoard[8.piece_ID = 6;
-		}else if((
-			chessBoard[8.piece_ID = 1;
-		}else{
-			chessBoard[8.piece_ID = 0;
-		}
-		
-		//initalize the y_coord
-		if((
-			chessBoard[8.chessBoard 845; //row 1
-		}else if( 
-			chessBoard[8.chessBoard 815; //row 0
-		}else if((
-			chessBoard[8.chessBoard 875; //row 2
-		}else if((
-			chessBoard[8.chessBoard 8105;//row 3
-		}else if((
-			chessBoard[8.chessBoard 8135; //row 4
-		}else if((
-			chessBoard[8.chessBoard 8165; //row 5
-		}else if((
-			chessBoard[8.chessBoard 8195; //row 6
-		}else{
-			chessBoard[8.chessBoard 8225; //row 7
-		}
-		
-		//x_coord goes up by 8 each time
-			if((
-			chessBoard[8.chessBoard 855;
-		}else if((
-			chessBoard[8.chessBoard 885;
-		}else if((
-			chessBoard[8.chessBoard 8115;
-		}else if((
-			chessBoard[8.chessBoard 8145;
-		}else if((
-			chessBoard[8.chessBoard 8175;
-		}else if((
-			chessBoard[8.chessBoard 8205;
-		}else if((
-			chessBoard[8.chessBoard 8235;
-		}else{
-			chessBoard[8.chessBoard 8265;
-		}
-		//colour of the pieces
-		if(
-			chessBoard[8.colour = ORANGE;//just use yello and orange for now
-			//orange = black, yellow = white
-		}else if(i >= 48){
-			chessBoard[8.colour = YELLOW;
-		}
-		
-
-	}//end for
 	
     /* set front pixel buffer to start of FPGA On-chip memory */
     *(pixel_ctrl_ptr + 1) = 0xC8000000; // first store the address in the 
@@ -266,7 +196,7 @@ int main(void)
         wait_for_vsync(); // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
 		draw_outline();
-		draw_board();
+		draw_board(chessBoard);
     }
 }
 
@@ -410,7 +340,7 @@ void init_highlights(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     //Loops through the board and sets all highlights to false
     for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
         for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
-            board[yCoord][xCoord].highlight = false;
+            board[yCoord][xCoord].highlighted = false;
         }
     }
 }
@@ -444,7 +374,7 @@ void init_empty_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     for(int yCoord = EMPTY_SPACE_BEGIN; yCoord <= EMPTY_SPACE_END; yCoord++) {
         for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
             board[yCoord][xCoord].piece.piece_ID = EMPTY_SQUARE;
-            board[yCoord][xCoord].piece.piece_color = EMPTY_PIECE;
+            board[yCoord][xCoord].piece.colour = EMPTY_PIECE;
         }
     } 
 }
