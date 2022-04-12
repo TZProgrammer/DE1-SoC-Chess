@@ -166,7 +166,7 @@ void init_frontrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yC
 int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
 
 //Checks if a move is valid
-bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
 
 //Checks if square is empty
 bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
@@ -179,7 +179,12 @@ int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 //Gets player move from user input
 //Returns x and y indexes of the chess board array of the square selected
 //If the input is invalid, loop until valid input is given
-int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, int startingLocationY);
+int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, int startingLocationY, int currentTurn);
+
+//Plays a turn of the game
+void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
+
+
 
 /////////////////////////////////////////////////////////////////////
 
@@ -208,6 +213,7 @@ int main(void)
     
     // declares the chessBoard
 	GridSquare chessBoard[BOARD_SIZE][BOARD_SIZE];
+    int currentTurn = WHITE_PIECE;
 	
 	//initializes the chessBoard to default values
     init_board(chessBoard);
@@ -526,7 +532,7 @@ int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int 
 }
 
 //Checks if a move is valid
-bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
+bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn) {
     return ;
 }
 
@@ -576,7 +582,7 @@ int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
 //Gets player move from user input
 //Returns x and y indexes of the chess board array of the square selected
 //If the input is invalid, loop until valid input is given
-int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, int startingLocationY) {
+int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, int startingLocationY, int currentTurn) {
 
     //Initialize variables
     int * move = malloc(sizeof(int) * 2);
@@ -593,7 +599,7 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
         yCoord = userInput[1];
 
         //Check if the move is valid
-        if(is_valid_move(board, startingLocationX, startingLocationY, xCoord, yCoord)) {
+        if(is_valid_move(board, startingLocationX, startingLocationY, xCoord, yCoord, currentTurn)) {
             move[0] = xCoord;
             move[1] = yCoord;
             break;
@@ -601,8 +607,11 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
     }
 
     return move;
+}
 
-
+//Plays a turn of the game
+void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
+    return ;
 }
 
 /////////////////////////////////////////////////////////////////////
