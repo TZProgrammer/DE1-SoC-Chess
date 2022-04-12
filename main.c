@@ -132,6 +132,9 @@ void draw_queen(int piece_colour, int xCoord, int yCoord);
 //Draws a king on the chess board
 void draw_king(int piece_colour, int xCoord, int yCoord);
 
+//Displays the winner of the game
+void display_winner(int winner);
+
 /////////////////////////////////////////////////////////////////////
 
 
@@ -184,7 +187,14 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
 //Plays a turn of the game
 void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
 
+//Switches turns
+void switch_turns(int * currentTurn);
 
+//Determines if the game is over
+bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
+
+//Determines the winner of the game
+int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -232,18 +242,26 @@ int main(void)
     pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer
     clear_screen(); // pixel_buffer_start points to the pixel buffer
 
-    while (1){
-        /* Erase any chessBoard 8d lines that were drawn in the last iteration */
-        
+    //loop while game is not over and play game
+    while (!is_game_over(chessBoard, currentTurn)){
+        //Draws the chess board
+        draw_board(chessBoard);
 
-        // code for drawing the chessBoard 8d lines (not shown)
-        // code for updating the locations of chessBoard 8ot shown)
+        //Plays a turn of the game
+        play_turn(chessBoard, currentTurn);
 
-        wait_for_vsync(); // swap front and back buffers on VGA vertical sync
-        pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
-		draw_outline(chessBoard);
-		draw_board(chessBoard);
+        //Switches the turn
+        switch_turns(&currentTurn);
     }
+
+    //Draws the chess board one last time
+    draw_board(chessBoard);
+
+    //Determine the winner of the game
+    int winner = get_winner(chessBoard, currentTurn);
+
+    //Displays the winner of the game
+    display_winner(winner);
 }
 
 
@@ -388,6 +406,11 @@ void draw_queen(int piece_colour, int xCoord, int yCoord) {
 
 //Draws a king on the chess board
 void draw_king(int piece_colour, int xCoord, int yCoord) {
+    return ;
+}
+
+//Displays the winner of the game
+void display_winner(int winner) {
     return ;
 }
 
@@ -611,6 +634,28 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
 
 //Plays a turn of the game
 void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
+    return ;
+}
+
+//Switches turns
+void switch_turns(int * currentTurn) {
+
+    //Switch turns
+    if(*currentTurn == WHITE_PIECE) {
+        *currentTurn = BLACK_PIECE;
+    } else {
+        *currentTurn = WHITE_PIECE;
+    }
+
+}
+
+//Determines if the game is over
+bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
+    return ;
+}
+
+//Determines the winner of the game
+int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
     return ;
 }
 
