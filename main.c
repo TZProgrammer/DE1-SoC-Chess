@@ -68,16 +68,16 @@ volatile int pixel_buffer_start;
 // x and y are the coordinates of the piece
 // colour is the color of the piece (white or black)
 // piece_ID is the id of the piece
-struct Piece
+typedef struct Piece
 {
     short int colour;
     PieceIdx piece_ID;
-};
-struct GridSquare
+} Piece;
+typedef struct GridSquare
 {
-    struct Piece piece;
+    Piece piece;
     int highlighted;
-};
+} GridSquare;
 
 
 // Function prototypes for drawing to the VGA display
@@ -90,7 +90,7 @@ void plot_pixel(int x, int y, short int line_colour);
 void clear_screen();
 
 //Draws the chess board in its current state
-void draw_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Synchronizes the double buffering of the VGA display
 void wait_for_vsync();
@@ -99,10 +99,10 @@ void wait_for_vsync();
 void draw_outline();
 
 //Draws a single piece on the chess board
-void draw_piece(struct Piece piece);
+void draw_piece(Piece piece);
 
 //Draws a single square on the chess board
-void draw_square(struct GridSquare square);
+void draw_square(GridSquare square);
 
 //Draws a pawn on the chess board
 void draw_pawn(int xCoord, int yCoord);
@@ -132,13 +132,13 @@ void draw_king(int xCoord, int yCoord);
 void play_chess();
 
 //Initializes the chess board to default state
-void init_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //get valid moves for a piece
-int * get_valid_moves(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
+int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
 
 //Checks if a move is valid
-int is_valid_move(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+int is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -151,23 +151,12 @@ int main(void)
     volatile int * pixel_ctrl_ptr = (int *)0xFF203020;
     
     // declares the chessBoard
-	struct GridSquare chessBoard[BOARD_SIZE][BOARD_SIZE];
+	GridSquare chessBoard[BOARD_SIZE][BOARD_SIZE];
 	
 	//initializes the chessBoard to default values
     init_board(chessBoard);
-    //Loop through chessboard and sets GridSquare to default values
-	for(int yCoord = 0; yCoord <= BOARD_SIZE-1; yCoord++){
-        for(int xCoord = 0; xCoord <= BOARD_SIZE-1; xCoord++){
-            if((yCoord == 0) ){
-                chessBoard[xCoord][yCoord].piece.piece_ID = 4;
-            }
-            else{
-                chessBoard[xCoord][yCoord].piece.piece_ID = 0;
-            }
 
-
-        }
-    }
+    
 
 
 	for(int yCoord = 0; yCoord <= 7; yCoord++){
@@ -285,7 +274,7 @@ void clear_screen()
 }
 
 //Draws the chess board in its current state
-void draw_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]){
+void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
 	int y,x;
 	for (x = 40; x < 280; x++){
 		for (y = 0; y < 240; y++){
@@ -334,12 +323,12 @@ void draw_outline(){
 }
 
 //Draws a single piece on the chess board
-void draw_piece(struct Piece piece) {
+void draw_piece(Piece piece) {
     return ;
 }
 
 //Draws a single square on the chess board
-void draw_square(struct GridSquare square) {
+void draw_square(GridSquare square) {
     return ;
 }
 
@@ -385,17 +374,38 @@ void play_chess() {
 }
 
 //Initializes the chess board to default state
-void init_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+    
+    //Initialize back row for white pieces
+    board[0][0] = 
+
+
+    //Loop through chessboard and sets GridSquare to default values
+	for(int yCoord = 0; yCoord <= BOARD_SIZE-1; yCoord++){
+
+        //If row one
+        for(int xCoord = 0; xCoord <= BOARD_SIZE-1; xCoord++){
+            if((yCoord == 0) ){
+                chessBoard[xCoord][yCoord].piece.piece_ID = 4;
+            }
+            else{
+                chessBoard[xCoord][yCoord].piece.piece_ID = 0;
+            }
+
+
+        }
+    }
+    
     return ;
 }
 
 //get valid moves for a piece
-int * get_valid_moves(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord) {
+int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord) {
     return ;
 }
 
 //Checks if a move is valid
-int is_valid_move(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
+int is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
     return ;
 }
 
