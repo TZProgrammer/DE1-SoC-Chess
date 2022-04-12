@@ -71,11 +71,13 @@ volatile int pixel_buffer_start;
 
 
 //Piece struct holds information about a piece
-// colour is the color of the piece (white or black)
-// piece_ID is the id of the piece
 typedef struct Piece
 {
+
+    //Colour of the piece
     short int colour;
+
+    //ID of the piece (Determines which piece it is or if it is empty)
     PieceIdx piece_ID;
 } Piece;
 
