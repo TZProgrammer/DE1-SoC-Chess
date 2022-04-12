@@ -71,7 +71,6 @@ volatile int pixel_buffer_start;
 
 
 //Piece struct holds information about a piece
-// x and y are the coordinates of the piece
 // colour is the color of the piece (white or black)
 // piece_ID is the id of the piece
 typedef struct Piece
@@ -79,11 +78,24 @@ typedef struct Piece
     short int colour;
     PieceIdx piece_ID;
 } Piece;
+
+
+//GridSquare struct holds information about a square on the chess board
 typedef struct GridSquare
 {
+    //current piece on the square
     Piece piece;
+
+    //colour of the square
     int colour;
+
+    //Determines if square should be highlighted when drawn
+    //Highlighted squares are used to show where a piece can move
     int highlighted;
+
+    //Determines if square should be outlined when drawn
+    //Outlined squares are used to show current selected square
+    int outlined;
 } GridSquare;
 
 
