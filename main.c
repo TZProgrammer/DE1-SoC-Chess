@@ -127,8 +127,20 @@ void draw_king(int xCoord, int yCoord);
 /////////////////////////////////////////////////////////////////////
 // Function prototypes for the chess game
 
+//Enters chess game loop
+void play_chess();
+
 //Initializes the chess board to default state
 void init_board(struct GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+
+//get valid moves for a piece
+int * get_valid_moves(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
+
+//Checks if a move is valid
+int is_valid_move(struct GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+
+/////////////////////////////////////////////////////////////////////
 
 
 
