@@ -188,7 +188,7 @@ int y_to_pixel(int yCoord);
 
 int main(void)
 {
-    volatile int * pixel_ctrl_ptr = (int *)0xFF203020;
+    volatile int * pixel_ctrl_ptr = (int *)PIXEL_BUF_CTRL_BASE;
     
     // declares the chessBoard
 	GridSquare chessBoard[BOARD_SIZE][BOARD_SIZE];
@@ -198,7 +198,7 @@ int main(void)
 	
 
     /* set front pixel buffer to start of FPGA On-chip memory */
-    *(pixel_ctrl_ptr + 1) = 0xC8000000; // first store the address in the 
+    *(pixel_ctrl_ptr + 1) = FPGA_ONCHIP_BASE; // first store the address in the 
                                         // back buffer
     /* now, swap the front/back buffers, to set the front buffer location */
     wait_for_vsync();
@@ -206,7 +206,7 @@ int main(void)
     pixel_buffer_start = *pixel_ctrl_ptr;
     clear_screen(); // pixel_buffer_start points to the pixel buffer
     /* set back pixel buffer to start of SDRAM memory */
-    *(pixel_ctrl_ptr + 1) = 0xC0000000;
+    *(pixel_ctrl_ptr + 1) = SDRAM_BASE;
     pixel_buffer_start = *(pixel_ctrl_ptr + 1); // we draw on the back buffer
     clear_screen(); // pixel_buffer_start points to the pixel buffer
 
@@ -270,7 +270,7 @@ void draw_outline(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
 //Synchronizes the double buffering of the VGA display
 void wait_for_vsync(){
 	
-    volatile int *pixel_ctrl_ptr = (int *) 0xFF203020;
+    volatile int *pixel_ctrl_ptr = (int *) PIXEL_BUF_CTRL_BASE;
 	int status;
 	
     //launches the swap process
