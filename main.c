@@ -57,6 +57,7 @@ const int RESOLUTION_Y          =240;
 
 // Global constants for the chess board
 const int BOARD_SIZE            = 8;
+const int SQUARE_SIZE           = 30;
 const int WHITE_PIECE           = 1;
 const int BLACK_PIECE           = 0;
 const int WHITE_SQUARE          = 1;
@@ -99,7 +100,7 @@ void clear_screen();
 void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Draws background outline of the chess board
-void draw_outline();
+void draw_outline(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Synchronizes the double buffering of the VGA display
 void wait_for_vsync();
@@ -195,6 +196,7 @@ int main(void)
 	//initializes the chessBoard to default values
     init_board(chessBoard);
 	
+
     /* set front pixel buffer to start of FPGA On-chip memory */
     *(pixel_ctrl_ptr + 1) = 0xC8000000; // first store the address in the 
                                         // back buffer
@@ -217,7 +219,7 @@ int main(void)
 
         wait_for_vsync(); // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
-		draw_outline();
+		draw_outline(chessBoard);
 		draw_board(chessBoard);
     }
 }
@@ -247,30 +249,20 @@ void clear_screen()
 void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
 	
     //Draws outline of the chess board
-    draw_outline();
+    draw_outline(board);
 
     //Draws the pieces on the chess board
-
+    draw_pieces(board);
 
 }
 
 //Draws background outline of the chess board
-void draw_outline() {
-    int x,y;
-
-    //Draws the outline of the chess board
-    for (x = 40; x < 280; x++){
-        for (y = 0; y < 240; y++){
-            if((x < 70 && x > 40) || (x > 100 && x < 130) || (x > 160 && x < 190) || (x > 220 && x < 250)){//first column
-                if(y < 30 || (y > 60 && y < 90) || (y > 120 && y < 150) || (y > 180 && y < 210)){
-                    plot_pixel(x,y, BLACK);
-                }
-            }
-            if((x > 70 && x < 100) || (x > 130 && x < 160) || (x > 190 && x < 220) || (x > 250 && x < 280)){
-                if((y > 30 && y < 60) || (y > 90 && y < 120) || (y > 150 && y < 180) || (y > 210)){
-                plot_pixel(x,y, BLACK);
-                }
-            }
+void draw_outline(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+    
+    //Loops through each square on the chess board and draws the square
+    for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++){
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++){
+            draw_square(board[yCoord][xCoord], yCoord, xCoord);
         }
     }
 }
@@ -334,7 +326,17 @@ void draw_piece(Piece piece, int xCoord, int yCoord) {
 
 //Draws a single square on the chess board
 void draw_square(GridSquare square, int xCoord, int yCoord) {
-    return ;
+    
+    //Convert xCoord and yCoord to pixel coordinates
+    int startingPixelCoordX = x_to_pixel(xCoord);
+    int startingPixelCoordY = y_to_pixel(yCoord);
+
+    //Draws the square
+    for (int pixelCoordX = startingPixelCoordX; pixelCoordX < startingPixelCoordX + SQUARE_SIZE; pixelCoordX++) {
+        for (int pixelCoordY = startingPixelCoordY; pixelCoordY < startingPixelCoordY + SQUARE_SIZE; pixelCoordY++) {
+            plot_pixel(pixelCoordX, pixelCoordY, square.colour);
+        }
+    }
 }
 
 //Draws a pawn on the chess board
@@ -519,13 +521,15 @@ int is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int
 /////////////////////////////////////////////////////////////////////
 
 //convert x index to x pixel coordinate
+//pixel index will map to the top left most pixel of the square
 int x_to_pixel(int xCoord){
-    return ;
+    return xCoord * SQUARE_SIZE;
 }
 
 //convert y index to y pixel coordinate
+//pixel index will map to the top left most pixel of the square
 int y_to_pixel(int yCoord){
-    return ;
+    return yCoord * SQUARE_SIZE;
 }
 
 /////////////////////////////////////////////////////////////////////

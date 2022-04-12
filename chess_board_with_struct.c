@@ -1,42 +1,42 @@
 
 	/* This files provides address values that exist in the system */
 
-const int SDRAM_BASE            0xC0000000
-const int FPGA_ONCHIP_BASE      0xC8000000
-const int FPGA_CHAR_BASE        0xC9000000
+#define SDRAM_BASE            0xC0000000
+#define FPGA_ONCHIP_BASE      0xC8000000
+#define FPGA_CHAR_BASE        0xC9000000
 
 /* Cyclone V FPGA devices */
-const int LEDR_BASE             0xFF200000
-const int HEX3_HEX0_BASE        0xFF200020
-const int HEX5_HEX4_BASE        0xFF200030
-const int SW_BASE               0xFF200040
-const int KEY_BASE              0xFF200050
-const int TIMER_BASE            0xFF202000
-const int PIXEL_BUF_CTRL_BASE   0xFF203020
-const int CHAR_BUF_CTRL_BASE    0xFF203030
+#define LEDR_BASE             0xFF200000
+#define HEX3_HEX0_BASE        0xFF200020
+#define HEX5_HEX4_BASE        0xFF200030
+#define SW_BASE               0xFF200040
+#define KEY_BASE              0xFF200050
+#define TIMER_BASE            0xFF202000
+#define PIXEL_BUF_CTRL_BASE   0xFF203020
+#define CHAR_BUF_CTRL_BASE    0xFF203030
 
 /* VGA colors */
-const int WHITE 0xFFFF
-const int YELLOW 0xFFE0
-const int RED 0xF800
-const int GREEN 0x07E0
-const int BLUE 0x001F
-const int CYAN 0x07FF
-const int MAGENTA 0xF81F
-const int GREY 0xC618
-const int PINK 0xFC18
-const int ORANGE 0xFC00
+#define WHITE 0xFFFF
+#define YELLOW 0xFFE0
+#define RED 0xF800
+#define GREEN 0x07E0
+#define BLUE 0x001F
+#define CYAN 0x07FF
+#define MAGENTA 0xF81F
+#define GREY 0xC618
+#define PINK 0xFC18
+#define ORANGE 0xFC00
 
-const int ABS(x) (((x) > 0) ? (x) : -(x))
+#define ABS(x) (((x) > 0) ? (x) : -(x))
 
 /* Screen size. */
-const int RESOLUTION_X 320
-const int RESOLUTION_Y 240
+#define RESOLUTION_X 320
+#define RESOLUTION_Y 240
 
 /* Constants for animation */
 
-const int FALSE 0
-const int TRUE 1
+#define FALSE 0
+#define TRUE 1
 
 #include <stdlib.h>
 #include <stdio.h>
