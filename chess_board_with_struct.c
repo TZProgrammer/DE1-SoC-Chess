@@ -185,15 +185,15 @@ void clear_screen()
 {
         int y, x;
 
-        for (x = 0; x < 320; x++)
-                for (y = 0; y < 240; y++)
+        for (x = 0; x < RESOLUTION_X; x++)
+                for (y = 0; y < RESOLUTION_Y; y++)
                         plot_pixel (x, y, 0);
 }
 
 void draw_board(){
 	int y,x;
 	for (x = 40; x < 280; x++){
-		for (y = 0; y < 240; y++){
+		for (y = 0; y < RESOLUTION_Y; y++){
 		if((x < 70 && x > 40) || (x > 100 && x < 130) || (x > 160 && x < 190) || (x > 220 && x < 250)){//first column
 			if(y < 30 || (y > 60 && y < 90) || (y > 120 && y < 150) || (y > 180 && y < 210)){
 				plot_pixel(x,y, WHITE);
@@ -211,8 +211,8 @@ void draw_board(){
 
 void draw_outline(){
 	int x, y;
-	for(x = 0; x <=320; x++){
-		for(y = 0; y < 240; y++){
+	for(x = 0; x <=RESOLUTION_X; x++){
+		for(y = 0; y < RESOLUTION_Y; y++){
 			if((x <= 40) || (x >= 280)){
 			plot_pixel(x,y,GREY);
 			}

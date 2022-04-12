@@ -240,8 +240,8 @@ void clear_screen()
         int y, x;
 
         // loop through every pixel and set it to zero (black)
-        for (x = 0; x < 320; x++)
-                for (y = 0; y < 240; y++)
+        for (x = 0; x < RESOLUTION_X; x++)
+                for (y = 0; y < RESOLUTION_Y; y++)
                         plot_pixel (x, y, 0);
 }
 
