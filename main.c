@@ -205,6 +205,27 @@ int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int 
 //Checks if a move is valid
 bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
 
+//Checks if it is a valid pawn move
+bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+//Checks if it is a valid knight move
+bool is_valid_knight_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+//Checks if it is a valid bishop move
+bool is_valid_bishop_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+//Checks if it is a valid rook move
+bool is_valid_rook_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+//Checks if it is a valid queen move
+bool is_valid_queen_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+//Checks if it is a valid king move
+bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+
+//Checks if king is in check
+bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour);
+
 //Checks if square is empty
 bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
 
@@ -659,6 +680,87 @@ int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int 
 
 //Checks if a move is valid
 bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn) {
+    
+    //Checks if starting square is empty
+    if(board[yCoordStart][xCoordStart].piece.piece_ID == EMPTY_SQUARE) {
+        return false;
+    }
+
+    //Checks if ending square has piece of the same colour as the piece in the starting square
+    if(board[yCoordStart][xCoordStart].piece.colour == board[yCoordEnd][xCoordEnd].piece.colour) {
+        return false;
+    }
+
+    //Checks if the piece in the starting square is of the same colour as currentTurn
+    if(board[yCoordStart][xCoordStart].piece.colour != currentTurn) {
+        return false;
+    }
+
+    //Checks if the move is valid according to the piece type at starting square
+    switch(board[yCoordStart][xCoordStart].piece.piece_ID) {
+        case PAWN:
+            return is_valid_pawn_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+        case ROOK:
+            return is_valid_rook_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+        case KNIGHT:
+            return is_valid_knight_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+        case BISHOP:
+            return is_valid_bishop_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+        case QUEEN:
+            return is_valid_queen_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+        case KING:
+            return is_valid_king_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+        default:
+            return false;
+    }
+    
+
+}
+
+//Checks if it is a valid pawn move
+bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
+
+    return;
+
+}
+
+//Checks if it is a valid knight move
+bool is_valid_knight_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
+
+    return;
+
+}
+
+//Checks if it is a valid bishop move
+bool is_valid_bishop_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
+
+    return;
+
+}
+
+//Checks if it is a valid rook move
+bool is_valid_rook_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
+
+    return;
+
+}
+
+//Checks if it is a valid queen move
+bool is_valid_queen_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
+
+    return;
+
+}
+
+//Checks if it is a valid king move
+bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
+
+    return;
+
+}
+
+//Checks if king is in check
+bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour) {
     return ;
 }
 
@@ -750,8 +852,6 @@ void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
     //Free memory
     free(selectedPieceLocation);
     free(moveLocation);
-
-
 }
 
 //Move a piece from one square to another
