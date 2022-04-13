@@ -758,7 +758,28 @@ bool is_valid_bishop_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordSt
 //Checks if it is a valid rook move
 bool is_valid_rook_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
 
-    return;
+    //Checks if the move is a valid rook move
+    if(xCoordStart != xCoordEnd && yCoordStart != yCoordEnd) {
+        return false;
+    }
+    
+    //Checks if the path of the rook is clear
+    if(xCoordStart == xCoordEnd) {
+        for(int i = 1; i < abs(yCoordStart - yCoordEnd); i++) {
+            if(board[yCoordStart + i * (yCoordEnd - yCoordStart) / abs(yCoordEnd - yCoordStart)][xCoordStart].piece.piece_ID != EMPTY_SQUARE) {
+                return false;
+            }
+        }
+    }
+    else {
+        for(int i = 1; i < abs(xCoordStart - xCoordEnd); i++) {
+            if(board[yCoordStart][xCoordStart + i * (xCoordEnd - xCoordStart) / abs(xCoordEnd - xCoordStart)].piece.piece_ID != EMPTY_SQUARE) {
+                return false;
+            }
+        }
+    }
+
+    return true;
 
 }
 
