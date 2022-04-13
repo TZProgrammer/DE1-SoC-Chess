@@ -798,7 +798,13 @@ bool is_valid_queen_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordSta
 //Checks if it is a valid king move
 bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
 
-    return;
+    //Checks if the move is a valid king move
+    if(abs(xCoordStart - xCoordEnd) <= 1 && abs(yCoordStart - yCoordEnd) <= 1) {
+        return true;
+    }
+
+    return false;
+
 
 }
 
