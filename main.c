@@ -786,7 +786,12 @@ bool is_valid_rook_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
 //Checks if it is a valid queen move
 bool is_valid_queen_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
 
-    return;
+    //Checks if the move is both a valid bishop and a valid rook move
+    if(is_valid_bishop_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd) || is_valid_rook_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd)) {
+        return true;
+    }
+
+    return false;
 
 }
 
