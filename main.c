@@ -61,10 +61,10 @@ const int BOARD_SIZE            = 8;
 const int SQUARE_SIZE           = 30;
 const int WHITE_PIECE           = 1;
 const int BLACK_PIECE           = 0;
-const int WHITE_SQUARE_COLOUR   = WHITE;
-const int BLACK_SQUARE_COLOUR   = GREEN;
+const int WHITE_SQUARE_COLOUR   = 0xFFFF;
+const int BLACK_SQUARE_COLOUR   = 0x0000;
 const int EMPTY_PIECE           =-1;
-const int STALEMATE            =-1;
+const int STALEMATE             =-1;
 	
 
 // location of the pixel buffer in SDRAM
@@ -425,7 +425,7 @@ void draw_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     //Loops through chess board and draws all pieces
     for (int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
         for (int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
-            draw_piece(board[yCoord][xCoord].piece, yCoord, xCoord);
+            draw_piece(board[yCoord][xCoord].piece, xCoord, yCoord);
         }
     }
 }
@@ -472,32 +472,44 @@ void draw_square(GridSquare square, int xCoord, int yCoord) {
 
 //Draws a pawn on the chess board
 void draw_pawn(int piece_colour, int xCoord, int yCoord) {
-    return ;
+    
+    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, YELLOW);
+
 }
 
 //Draws a knight on the chess board
 void draw_knight(int piece_colour, int xCoord, int yCoord) {
-    return ;
+    
+    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, RED);
+
 }
 
 //Draws a bishop on the chess board
 void draw_bishop(int piece_colour, int xCoord, int yCoord) {
-    return ;
+    
+    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, CYAN);
+
 }
 
 //Draws a rook on the chess board
 void draw_rook(int piece_colour, int xCoord, int yCoord) {
-    return ;
+    
+    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, MAGENTA);
+
 }
 
 //Draws a queen on the chess board
 void draw_queen(int piece_colour, int xCoord, int yCoord) {
-    return ;
+    
+    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, BLUE);
+
 }
 
 //Draws a king on the chess board
 void draw_king(int piece_colour, int xCoord, int yCoord) {
-    return ;
+    
+    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, PINK);
+
 }
 
 //Displays the winner of the game
@@ -766,8 +778,6 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
         default:
             return false;
     }
-    
-
 }
 
 //Checks if it is a valid pawn move
