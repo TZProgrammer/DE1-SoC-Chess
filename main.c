@@ -224,6 +224,9 @@ bool is_valid_queen_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordSta
 //Checks if it is a valid king move
 bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
 
+//Checks if a piece has valid moves
+bool has_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord, int currentTurn);
+
 //Checks if king is in check
 bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour);
 
@@ -272,6 +275,9 @@ int* get_input_from_switches();
 
 //Copy board to another board
 void copy_board(GridSquare board[BOARD_SIZE][BOARD_SIZE], GridSquare copyBoard[BOARD_SIZE][BOARD_SIZE]);
+
+//Gets king position
+int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -854,6 +860,21 @@ bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
     return false;
 }
 
+//Checks if a piece has valid moves
+bool has_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int currentTurn) {
+
+    //For the piece in xCoord, yCoord, check if it has any valid moves using function is_valid_move
+    for(int xCoordEnd = 0; xCoordEnd < BOARD_SIZE; xCoordEnd++) {
+        for(int yCoordEnd = 0; yCoordEnd < BOARD_SIZE; yCoordEnd++) {
+            if(is_valid_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd, currentTurn)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 //Checks if king is in check
 bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour) {
     return false;
@@ -973,7 +994,27 @@ void switch_turns(int * currentTurn) {
 
 //Determines if the game is over
 bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
-    return ;
+    
+    //determine king position
+    int* kingPosition = get_king_position(board, currentTurn);
+
+    //Check if king is in check
+    if(!is_in_check(board, currentTurn)) {
+        
+        //iterate through every piece and see if it can move
+        for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+            for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+                if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE) {
+                    if(is_valid_move(board, xCoord, yCoord, kingPosition[0], kingPosition[1], currentTurn)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+
+    }
+
 }
 
 //Determines the winner of the game
@@ -1015,6 +1056,29 @@ void copy_board(GridSquare board[BOARD_SIZE][BOARD_SIZE], GridSquare copyBoard[B
             copyBoard[i][j] = board[i][j];
         }
     }
+}
+
+//Gets king position
+int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour) {
+
+    //Initialize variables
+    int * kingPosition = malloc(sizeof(int) * 2);
+    int xCoord = 0;
+    int yCoord = 0;
+
+    //Loop through the board to find the king
+    for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            if(board[yCoord][xCoord].piece.piece_ID == KING && board[yCoord][xCoord].piece.colour == piece_colour) {
+                kingPosition[0] = xCoord;
+                kingPosition[1] = yCoord;
+                break;
+            }
+        }
+    }
+
+    return kingPosition;
+
 }
 
 /////////////////////////////////////////////////////////////////////
