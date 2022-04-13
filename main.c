@@ -254,18 +254,20 @@ int* get_input_from_switches();
 int main(void)
 {
 
-    // declares the chessBoard
+    //Declares the chessBoard
 	GridSquare chessBoard[BOARD_SIZE][BOARD_SIZE];
+
+    //Initializes initial turn to white
     int currentTurn = WHITE_PIECE;
 	
-	//initializes the chessBoard to default values
+	//Initializes the chessBoard to default values
     init_board(chessBoard);
 	
-    //initializes pixel buffer addresses
+    //Initializes pixel buffer addresses
     set_pixel_buffer_addresses();
     
 
-    //loop while game is not over and play game
+    //Loop while game is not over and play game
     while (!is_game_over(chessBoard, currentTurn)){
         //Draws the chess board
         draw_board(chessBoard);
@@ -421,11 +423,7 @@ void draw_square(GridSquare square, int xCoord, int yCoord) {
     int startingPixelCoordY = y_to_pixel(yCoord);
 
     //Draws the square
-    for (int pixelCoordX = startingPixelCoordX; pixelCoordX < startingPixelCoordX + SQUARE_SIZE; pixelCoordX++) {
-        for (int pixelCoordY = startingPixelCoordY; pixelCoordY < startingPixelCoordY + SQUARE_SIZE; pixelCoordY++) {
-            plot_pixel(pixelCoordX, pixelCoordY, square.colour);
-        }
-    }
+    draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, square.colour);
 }
 
 //Draws a pawn on the chess board
@@ -781,7 +779,12 @@ int y_to_pixel(int yCoord){
 
 //gets inputs from switches
 int* get_input_from_switches() {
-    return ;
+    
+    //Gets input from switches at DE1-SoC board
+    return;
+    
+
+
 }
 
 /////////////////////////////////////////////////////////////////////
