@@ -720,8 +720,22 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
 //Checks if it is a valid pawn move
 bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
 
-    return;
+    //Checks pawn move is moving diagonally and capturing a piece
+    if(board[yCoordEnd][xCoordEnd].piece.piece_ID != EMPTY_SQUARE && abs(xCoordStart - xCoordEnd) == 1 && yCoordEnd - yCoordStart == 1) {
+        return true;
+    }
 
+    //Checks pawn move is moving forward and it's path is free
+    if(board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && yCoordEnd - yCoordStart == 1) {
+        return true;
+    }
+
+    //Checks if pawn is in starting location and moving forward two squares and it's path is free
+    if(yCoordStart == 1 && yCoordEnd == 3 && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && board[yCoordEnd - 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE) {
+        return true;
+    }
+
+    return false;
 }
 
 //Checks if it is a valid knight move
@@ -780,7 +794,6 @@ bool is_valid_rook_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
     }
 
     return true;
-
 }
 
 //Checks if it is a valid queen move
@@ -792,7 +805,6 @@ bool is_valid_queen_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordSta
     }
 
     return false;
-
 }
 
 //Checks if it is a valid king move
@@ -804,8 +816,6 @@ bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
     }
 
     return false;
-
-
 }
 
 //Checks if king is in check
