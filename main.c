@@ -199,8 +199,8 @@ void init_backrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCo
 //Initializes frontrank pieces given the board, colour and yCoord
 void init_frontrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord);
 
-//get valid moves for a piece
-int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
+//highlights valid moves for a piece at square xCoord, yCoord
+void highlight_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord, int currentTurn);
 
 //Checks if a move is valid
 bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
@@ -673,9 +673,17 @@ void init_frontrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yC
     }
 }
 
-//get valid moves for a piece
-int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord) {
-    return ;
+//highlights valid moves for a piece at square xCoord, yCoord
+void highlight_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xStartingCoord, int yStartingCoord, int currentTurn) {
+
+    //Loops through board and set grid highlight to true based on if the move is valid
+    for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            if(is_valid_move(board, xStartingCoord, yStartingCoord, xCoord, yCoord, currentTurn)) {
+                board[yCoord][xCoord].highlighted = true;
+            }
+        }
+    }
 }
 
 //Checks if a move is valid
