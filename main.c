@@ -61,8 +61,8 @@ const int BOARD_SIZE            = 8;
 const int SQUARE_SIZE           = 30;
 const int WHITE_PIECE           = 1;
 const int BLACK_PIECE           = 0;
-const int WHITE_SQUARE          = 1;
-const int BLACK_SQUARE          = 0;
+const int WHITE_SQUARE_COLOUR   = WHITE;
+const int BLACK_SQUARE_COLOUR   = GREEN;
 const int EMPTY_PIECE           =-1;
 const int STALEMATE            =-1;
 	
@@ -593,10 +593,10 @@ void init_colours(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
     for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
         for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
             if((xCoord + yCoord) % 2 == 0) {
-                board[yCoord][xCoord].colour = WHITE_SQUARE;
+                board[yCoord][xCoord].colour = WHITE_SQUARE_COLOUR;
             }
             else {
-                board[yCoord][xCoord].colour = BLACK_SQUARE;
+                board[yCoord][xCoord].colour = BLACK_SQUARE_COLOUR;
             }
         }
     }
