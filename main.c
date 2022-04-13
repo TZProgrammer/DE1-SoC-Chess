@@ -269,6 +269,9 @@ int y_to_pixel(int yCoord);
 //gets inputs from switches
 int* get_input_from_switches();
 
+//Copy board to another board
+void copy_board(GridSquare board[BOARD_SIZE][BOARD_SIZE], GridSquare copyBoard[BOARD_SIZE][BOARD_SIZE]);
+
 /////////////////////////////////////////////////////////////////////
 
 
@@ -709,6 +712,23 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
         return false;
     }
 
+    //Checks if the king would be in check after the move
+
+    //Create temporary board to test the move
+    GridSquare tempBoard[BOARD_SIZE][BOARD_SIZE];
+    copy_board(board, tempBoard);
+
+    //Move the piece in the starting square to the ending square
+    tempBoard[yCoordEnd][xCoordEnd].piece = tempBoard[yCoordStart][xCoordStart].piece;
+
+    //Set the piece in the starting square to empty
+    tempBoard[yCoordStart][xCoordStart].piece.piece_ID = EMPTY_SQUARE;
+
+    //Check if the king would be in check after the move
+    if(is_in_check(tempBoard, currentTurn)) {
+        return false;
+    }
+
     //Checks if the move is valid according to the piece type at starting square
     switch(board[yCoordStart][xCoordStart].piece.piece_ID) {
         case PAWN:
@@ -981,9 +1001,17 @@ int* get_input_from_switches() {
     
     //Gets input from switches at DE1-SoC board
     return;
-    
+}
 
+//Copy board to another board
+void copy_board(GridSquare board[BOARD_SIZE][BOARD_SIZE], GridSquare copyBoard[BOARD_SIZE][BOARD_SIZE]) {
 
+    //Copy board
+    for(int i = 0; i < BOARD_SIZE; i++) {
+        for(int j = 0; j < BOARD_SIZE; j++) {
+            copyBoard[i][j] = board[i][j];
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////
