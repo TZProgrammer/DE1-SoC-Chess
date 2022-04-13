@@ -767,8 +767,8 @@ bool is_valid_bishop_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordSt
     }
 
     //Checks if the path of the bishop is clear
-    for(int i = 1; i < abs(xCoordStart - xCoordEnd); i++) {
-        if(board[yCoordStart + i * (yCoordEnd - yCoordStart) / abs(xCoordEnd - xCoordStart)][xCoordStart + i * (xCoordEnd - xCoordStart) / abs(xCoordEnd - xCoordStart)].piece.piece_ID != EMPTY_SQUARE) {
+    for(int distance = 1; distance < abs(xCoordStart - xCoordEnd); distance++) {
+        if(board[yCoordStart + distance * (yCoordEnd - yCoordStart) / abs(xCoordEnd - xCoordStart)][xCoordStart + distance * (xCoordEnd - xCoordStart) / abs(xCoordEnd - xCoordStart)].piece.piece_ID != EMPTY_SQUARE) {
             return false;
         }
     }
@@ -784,15 +784,15 @@ bool is_valid_rook_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
     
     //Checks if the path of the rook is clear
     if(xCoordStart == xCoordEnd) {
-        for(int i = 1; i < abs(yCoordStart - yCoordEnd); i++) {
-            if(board[yCoordStart + i * (yCoordEnd - yCoordStart) / abs(yCoordEnd - yCoordStart)][xCoordStart].piece.piece_ID != EMPTY_SQUARE) {
+        for(int distance = 1; distance < abs(yCoordStart - yCoordEnd); distance++) {
+            if(board[yCoordStart + distance * (yCoordEnd - yCoordStart) / abs(yCoordEnd - yCoordStart)][xCoordStart].piece.piece_ID != EMPTY_SQUARE) {
                 return false;
             }
         }
     }
     else {
-        for(int i = 1; i < abs(xCoordStart - xCoordEnd); i++) {
-            if(board[yCoordStart][xCoordStart + i * (xCoordEnd - xCoordStart) / abs(xCoordEnd - xCoordStart)].piece.piece_ID != EMPTY_SQUARE) {
+        for(int distance = 1; distance < abs(xCoordStart - xCoordEnd); distance++) {
+            if(board[yCoordStart][xCoordStart + distance * (xCoordEnd - xCoordStart) / abs(xCoordEnd - xCoordStart)].piece.piece_ID != EMPTY_SQUARE) {
                 return false;
             }
         }
