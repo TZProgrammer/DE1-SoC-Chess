@@ -64,6 +64,7 @@ const int BLACK_PIECE           = 0;
 const int WHITE_SQUARE          = 1;
 const int BLACK_SQUARE          = 0;
 const int EMPTY_PIECE           =-1;
+const int STALEMATE            =-1;
 	
 
 // location of the pixel buffer in SDRAM
@@ -1013,7 +1014,16 @@ bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
 
 //Determines the winner of the game
 int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
-    return ;
+    
+    //Check if game is in stalemate
+    if(is_stalemate(board, currentTurn)) {
+        return STALEMATE;
+    }
+
+    //Check if game is in checkmate
+    if(is_checkmate(board, currentTurn)) {
+        return currentTurn;
+    }
 }
 
 //Checks if game ended in stalemate
