@@ -211,7 +211,7 @@ bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int y
 //Gets player selected piece from user input
 //Returns x and y indexes of the chess board array of the piece selected
 //If the input is invalid, loop until valid input is given
-int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Gets player move from user input
 //Returns x and y indexes of the chess board array of the square selected
@@ -220,6 +220,9 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
 
 //Plays a turn of the game
 void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
+
+//Move a piece from one square to another
+void move_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
 
 //Switches turns
 void switch_turns(int * currentTurn);
@@ -674,7 +677,7 @@ bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int y
 //Gets player selected piece from user inpu
 //Returns x and y indexes of the chess board array of the piece selected
 //If the input is invalid, loop until valid input is given
-int * get_selected_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
 
     //Initialize variables
     int * selectedPiece = malloc(sizeof(int) * 2);
@@ -734,7 +737,31 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
 
 //Plays a turn of the game
 void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
-    return ;
+    
+    //Get selected piece location
+    int * selectedPieceLocation = get_selected_piece_location(board);
+
+    //Get move location
+    int * moveLocation = get_move(board, selectedPieceLocation[0], selectedPieceLocation[1], currentTurn);
+
+    //Move piece
+    move_piece(board, selectedPieceLocation[0], selectedPieceLocation[1], moveLocation[0], moveLocation[1]);
+
+    //Free memory
+    free(selectedPieceLocation);
+    free(moveLocation);
+
+
+}
+
+//Move a piece from one square to another
+void move_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd) {
+
+    //Move the piece at starting location to end location
+    board[yCoordEnd][xCoordEnd].piece = board[yCoordStart][xCoordStart].piece;
+
+    //Set the piece at the starting location to empty
+    board[yCoordStart][xCoordStart].piece.piece_ID = EMPTY_SQUARE;
 }
 
 //Switches turns
