@@ -155,6 +155,20 @@ void display_winner(int winner);
 /////////////////////////////////////////////////////////////////////
 
 
+// Function prototypes for drawing primitives to the VGA display
+/////////////////////////////////////////////////////////////////////
+
+//Draws a square with the left top corner at (x,y) with size (size) and colour (colour)
+void draw_square_primitive(int xPixelCoord, int yPixelCoord, int size, short int colour);
+
+//Draws a rectangle with the left top corner at (x,y) with size (width,height) and colour (colour)
+void draw_rectangle_primitive(int xPixelCoord, int yPixelCoord, int width, int height, short int colour);
+
+//Draws a circle with the center at (x,y) with radius (radius) and colour (colour)
+void draw_circle_primitive(int xPixelCoord, int yPixelCoord, int radius, short int colour);
+
+/////////////////////////////////////////////////////////////////////
+
 // Function prototypes for the chess game
 /////////////////////////////////////////////////////////////////////
 
@@ -444,6 +458,47 @@ void draw_king(int piece_colour, int xCoord, int yCoord) {
 //Displays the winner of the game
 void display_winner(int winner) {
     return ;
+}
+
+/////////////////////////////////////////////////////////////////////
+
+
+// Function prototypes for drawing primitives to the VGA display
+/////////////////////////////////////////////////////////////////////
+
+//Draws a square with the left top corner at (x,y) with size (size) and colour (colour)
+void draw_square_primitive(int xPixelCoord, int yPixelCoord, int size, short int colour) {
+
+    //draws rectangle with width equal to height of length size
+    draw_rectangle_primitive(xPixelCoord, yPixelCoord, size, size, colour);
+
+}
+
+//Draws a rectangle with the left top corner at (x,y) with size (width,height) and colour (colour)
+void draw_rectangle_primitive(int xPixelCoord, int yPixelCoord, int width, int height, short int colour) {
+
+    //Loops through each pixel in the rectangle and draws it
+    for (int xCoord = xPixelCoord; xCoord < xPixelCoord + width; xCoord++) {
+        for (int yCoord = yPixelCoord; yCoord < yPixelCoord + height; yCoord++) {
+            plot_pixel(xCoord, yCoord, colour);
+        }
+    }
+
+
+}
+
+//Draws a circle with the center at (x,y) with radius (radius) and colour (colour)
+void draw_circle_primitive(int xPixelCoord, int yPixelCoord, int radius, short int colour) {
+
+
+    //Loops through each pixel in the circle and draws it
+    for (int xCoord = xPixelCoord - radius; xCoord < xPixelCoord + radius; xCoord++) {
+        for (int yCoord = yPixelCoord - radius; yCoord < yPixelCoord + radius; yCoord++) {
+            if (pow(xCoord - xPixelCoord, 2) + pow(yCoord - yPixelCoord, 2) <= pow(radius, 2)) {
+                plot_pixel(xCoord, yCoord, colour);
+            }
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////
