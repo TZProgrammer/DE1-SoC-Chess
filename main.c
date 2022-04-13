@@ -1006,7 +1006,9 @@ bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
 
     if(is_stalemate(board, currentTurn)) return true;
 
+    if(is_checkmate(board, currentTurn)) return true;
 
+    return false;
 }
 
 //Determines the winner of the game
@@ -1074,7 +1076,6 @@ bool is_checkmate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
     }
 
     return true;
-
 }
 
 /////////////////////////////////////////////////////////////////////
