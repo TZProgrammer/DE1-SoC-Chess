@@ -23,17 +23,17 @@ typedef int PieceIdx;
 
 
 // DE1-SOC FPGA devices base address
-const int SDRAM_BASE            =0xC0000000;
-const int FPGA_ONCHIP_BASE      =0xC8000000;
-const int FPGA_CHAR_BASE        =0xC9000000;
-const int LEDR_BASE             =0xFF200000;
-const int HEX3_HEX0_BASE        =0xFF200020;
-const int HEX5_HEX4_BASE        =0xFF200030;
-const int SW_BASE               =0xFF200040;
-const int KEY_BASE              =0xFF200050;
-const int TIMER_BASE            =0xFF202000;
-const int PIXEL_BUF_CTRL_BASE   =0xFF203020;
-const int CHAR_BUF_CTRL_BASE    =0xFF203030;
+const int* SDRAM_BASE            =0xC0000000;
+const int* FPGA_ONCHIP_BASE      =0xC8000000;
+const int* FPGA_CHAR_BASE        =0xC9000000;
+const int* LEDR_BASE             =0xFF200000;
+const int* HEX3_HEX0_BASE        =0xFF200020;
+const int* HEX5_HEX4_BASE        =0xFF200030;
+const int* SW_BASE               =0xFF200040;
+const int* KEY_BASE              =0xFF200050;
+const int* TIMER_BASE            =0xFF202000;
+const int* PIXEL_BUF_CTRL_BASE   =0xFF203020;
+const int* CHAR_BUF_CTRL_BASE    =0xFF203030;
 
 
 // VGA colors
