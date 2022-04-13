@@ -24,17 +24,17 @@ typedef int PieceIdx;
 
 
 // DE1-SOC FPGA devices base address
-const int* SDRAM_BASE            = (int*)0xC0000000;
-const int* FPGA_ONCHIP_BASE      = (int*)0xC8000000;
-const int* FPGA_CHAR_BASE        = (int*)0xC9000000;
-const int* LEDR_BASE             = (int*)0xFF200000;
-const int* HEX3_HEX0_BASE        = (int*)0xFF200020;
-const int* HEX5_HEX4_BASE        = (int*)0xFF200030;
-const int* SW_BASE               = (int*)0xFF200040;
-const int* KEY_BASE              = (int*)0xFF200050;
-const int* TIMER_BASE            = (int*)0xFF202000;
-const int* PIXEL_BUF_CTRL_BASE   = (int*)0xFF203020;
-const int* CHAR_BUF_CTRL_BASE    = (int*)0xFF203030;
+int* SDRAM_BASE            = (int*)0xC0000000;
+int* FPGA_ONCHIP_BASE      = (int*)0xC8000000;
+int* FPGA_CHAR_BASE        = (int*)0xC9000000;
+int* LEDR_BASE             = (int*)0xFF200000;
+int* HEX3_HEX0_BASE        = (int*)0xFF200020;
+int* HEX5_HEX4_BASE        = (int*)0xFF200030;
+int* SW_BASE               = (int*)0xFF200040;
+int* KEY_BASE              = (int*)0xFF200050;
+int* TIMER_BASE            = (int*)0xFF202000;
+int* PIXEL_BUF_CTRL_BASE   = (int*)0xFF203020;
+int* CHAR_BUF_CTRL_BASE    = (int*)0xFF203030;
 
 
 // VGA colors
@@ -238,7 +238,7 @@ bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int y
 //Gets player selected piece from user input
 //Returns x and y indexes of the chess board array of the piece selected
 //If the input is invalid, loop until valid input is given
-int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
 
 //Gets player move from user input
 //Returns x and y indexes of the chess board array of the square selected
@@ -930,12 +930,15 @@ bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int y
 //Gets player selected piece from user inpu
 //Returns x and y indexes of the chess board array of the piece selected
 //If the input is invalid, loop until valid input is given
-int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
 
     //Initialize variables
     int * selectedPiece = malloc(sizeof(int) * 2);
     int xCoord = 0;
     int yCoord = 0;
+
+    //Set LED 0 to 1 to indicate that the user is selecting a piece
+    *LEDR_BASE = 1;
 
     //Loop until valid input is given
     while(true) {
@@ -962,7 +965,7 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
         yCoord = userInput[1];
 
         //Check if the piece selected is valid
-        if(!is_empty_square(board, xCoord, yCoord)) {
+        if(!is_empty_square(board, xCoord, yCoord) && board[yCoord][xCoord].piece.colour == currentTurn) {
             selectedPiece[0] = xCoord;
             selectedPiece[1] = yCoord;
             break;
@@ -983,17 +986,47 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
     int xCoord = 0;
     int yCoord = 0;
 
+    //Set LED 0 to 2 to indicate that the user is selecting a move
+    *LEDR_BASE = 2;
+
     //Loop until valid input is given
     while(true) {
         
-        int* userInput = get_input_from_switches();
+        int* move = get_input_from_switches();
 
-        //Get x and y coordinates of the square selected
-        xCoord = userInput[0];
-        yCoord = userInput[1];
+        //If the tenth bit is not set, continue polling for input
+        if(move[2] == 0) {
 
-        //Check if the move is valid
-        if(is_valid_move(board, startingLocationX, startingLocationY, xCoord, yCoord, currentTurn)) {
+            //Reset outline of grid squares
+            init_outlines(board);
+
+            //Reset highlighted squares
+            init_highlights(board);
+
+            //Set the outline of the selected square to true
+            board[move[1]][move[0]].outlined = true;
+
+            //Loops through all the squares in the board and set highlighted to true if move is legal
+            for(int xCoordEnd = 0; xCoordEnd < BOARD_SIZE; xCoordEnd++) {
+                for(int yCoordEnd = 0; yCoordEnd < BOARD_SIZE; yCoordEnd++) {
+                    if(is_valid_move(board, startingLocationX, startingLocationY, xCoordEnd, yCoordEnd, currentTurn)) {
+                        board[yCoordEnd][xCoordEnd].highlighted = true;
+                    }
+                }
+            }
+
+            //Draw the board
+            draw_board(board);
+
+            continue;
+        }
+
+        //Get x and y coordinates of the piece selected
+        xCoord = move[0];
+        yCoord = move[1];
+
+        //Check if the piece selected is valid
+        if(is_valid_move(board, xCoord, yCoord, startingLocationX, startingLocationY, currentTurn)) {
             move[0] = xCoord;
             move[1] = yCoord;
             break;
@@ -1007,7 +1040,7 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
 void play_turn(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
     
     //Get selected piece location
-    int * selectedPieceLocation = get_selected_piece_location(board);
+    int * selectedPieceLocation = get_selected_piece_location(board, currentTurn);
 
     //Get move location
     int * moveLocation = get_move(board, selectedPieceLocation[0], selectedPieceLocation[1], currentTurn);
