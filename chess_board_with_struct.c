@@ -51,7 +51,7 @@ void plot_pixel(int x, int y, short int line_colour);
 void clear_screen();
 void draw_board();
 void wait_for_vsync();
-void draw_outline();
+void draw_squares();
 //have seperate functions for drawing each of the pieces
 //set a centre point for each box to know where to draw
 
@@ -158,7 +158,7 @@ int main(void)
 
         wait_for_vsync(); // swap front and back buffers on VGA vertical sync
         pixel_buffer_start = *(pixel_ctrl_ptr + 1); // new back buffer
-		draw_outline();
+		draw_squares();
 		draw_board();
     }
 }
@@ -209,7 +209,7 @@ void draw_board(){
 	}
 }
 
-void draw_outline(){
+void draw_squares(){
 	int x, y;
 	for(x = 0; x <=RESOLUTION_X; x++){
 		for(y = 0; y < RESOLUTION_Y; y++){

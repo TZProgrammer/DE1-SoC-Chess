@@ -119,7 +119,7 @@ void set_pixel_buffer_addresses();
 void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Draws background outline of the chess board
-void draw_outline(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+void draw_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Synchronizes the double buffering of the VGA display
 void wait_for_vsync();
@@ -381,7 +381,7 @@ void set_pixel_buffer_addresses(){
 void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
 	
     //Draws outline of the chess board
-    draw_outline(board);
+    draw_squares(board);
 
     //Draws the pieces on the chess board
     draw_pieces(board);
@@ -392,7 +392,7 @@ void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
 }
 
 //Draws background outline of the chess board
-void draw_outline(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+void draw_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     
     //Loops through each square on the chess board and draws the square
     for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++){
@@ -466,8 +466,22 @@ void draw_square(GridSquare square, int xCoord, int yCoord) {
     int startingPixelCoordX = x_to_pixel(xCoord);
     int startingPixelCoordY = y_to_pixel(yCoord);
 
-    //Draws the square
-    draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, square.colour);
+    //Draws the background of the square in black if it's not outlined and in magenta if it is
+    if (square.outlined == 0) {
+            draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, BLACK);
+    }
+    else {
+            draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, MAGENTA);
+    }
+
+
+    //Draws the square with it's colour depending on the highlighted status
+    if (square.highlighted == 0) {
+        draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, square.colour);
+    }
+    else {
+        draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, YELLOW);
+    }
 }
 
 //Draws a pawn on the chess board
@@ -930,6 +944,21 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
         
         int* userInput = get_input_from_switches();
 
+        //If the tenth bit is not set, continue polling for input
+        if(userInput[2] == 0) {
+
+            //Reset outline of grid squares
+            init_outlines(board);
+
+            //Set the outline of the selected square to true
+            board[yCoord][xCoord].outlined = true;
+
+            //Draw the board
+            draw_board(board);
+
+            continue;
+        }
+
         //Get x and y coordinates of the piece selected
         xCoord = userInput[0];
         yCoord = userInput[1];
@@ -941,6 +970,9 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
             break;
         }
     }
+
+    //free memory
+
 
     return selectedPiece;
 
@@ -1122,11 +1154,25 @@ int y_to_pixel(int yCoord){
     return yCoord * SQUARE_SIZE;
 }
 
-//gets inputs from switches
+//Gets inputs from switches
+//Returns x and y coordinates of the selected piece on indexes 0 and 1 respectively
+//Returns if user sent the input to software in indexes 2
 int* get_input_from_switches() {
     
     //Gets input from switches at DE1-SoC board
-    return;
+    volatile int userInput = *(volatile int *) (SW_BASE);
+
+    //Create array to store the input
+    int* userInputArray = (int*) malloc(sizeof(int) * 3);
+
+    //Convert user input to x and y indexes
+    userInputArray[0] = userInput & 0x00000007;
+    userInputArray[1] = (userInput & 0x00000070) >> 3;
+    
+    //Get if user sent input to software
+    userInputArray[2] = (userInput & 0x00000200) >> 9;
+
+    return userInputArray;
 }
 
 //Copy board to another board
