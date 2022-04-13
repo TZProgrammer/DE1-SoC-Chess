@@ -261,6 +261,9 @@ int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
 //Checks if game ended in stalemate
 bool is_stalemate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
 
+//Checks if the game is in checkmate
+bool is_checkmate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
+
 /////////////////////////////////////////////////////////////////////
 
 
@@ -1023,6 +1026,47 @@ bool is_stalemate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
                 if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE && board[yCoord][xCoord].piece.colour == currentTurn) {
                     if(has_valid_moves(board, xCoord, yCoord, currentTurn)) {
                         return false;
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+//Checks if the game is in checkmate
+bool is_checkmate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
+
+    //Check if king is not in check
+    if(!is_in_check(board, currentTurn)) return false;
+
+    //Check if any move can prevent checkmate
+
+    //Create a copy of the board
+    GridSquare boardCopy[BOARD_SIZE][BOARD_SIZE];
+    copy_board(board, boardCopy);
+
+    //Iterate through every piece
+    //Iterate through every possible move
+    //Check if move is valid and would get the king out of check
+    for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+        for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+            if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE && board[yCoord][xCoord].piece.colour == currentTurn) {
+                for(int xCoordEnd = 0; xCoordEnd < BOARD_SIZE; xCoordEnd++) {
+                    for(int yCoordEnd = 0; yCoordEnd < BOARD_SIZE; yCoordEnd++) {
+                        if(is_valid_move(board, xCoord, yCoord, xCoordEnd, yCoordEnd, currentTurn)) {
+
+                            //Save piece in end location
+                            GridSquare tempPiece = boardCopy[yCoordEnd][xCoordEnd];
+
+                            move_piece(boardCopy, xCoord, yCoord, xCoordEnd, yCoordEnd);
+                            if(!is_in_check(boardCopy, currentTurn)) {
+                                return false;
+                            }
+                            move_piece(boardCopy, xCoordEnd, yCoordEnd, xCoord, yCoord);
+                            boardCopy[yCoordEnd][xCoordEnd] = tempPiece;
+                        }
                     }
                 }
             }
