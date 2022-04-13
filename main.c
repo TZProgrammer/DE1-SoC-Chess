@@ -8,6 +8,7 @@ Those structs will contain the piece type, the color of the piece, and if a squa
 
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include <stdbool.h>
 
 
@@ -800,6 +801,8 @@ bool is_valid_bishop_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordSt
             return false;
         }
     }
+
+    return true;
 }
 
 //Checks if it is a valid rook move
