@@ -727,15 +727,32 @@ bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
 //Checks if it is a valid knight move
 bool is_valid_knight_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
 
-    return;
-
+    //Checks if the move is a valid knight move
+    if(abs(xCoordStart - xCoordEnd) == 2 && abs(yCoordStart - yCoordEnd) == 1) {
+        return true;
+    }
+    else if(abs(xCoordStart - xCoordEnd) == 1 && abs(yCoordStart - yCoordEnd) == 2) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 //Checks if it is a valid bishop move
 bool is_valid_bishop_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
 
-    return;
+    //Checks if the move is a valid bishop move
+    if(abs(xCoordStart - xCoordEnd) != abs(yCoordStart - yCoordEnd)) {
+        return false;
+    }
 
+    //Checks if the path of the bishop is clear
+    for(int i = 1; i < abs(xCoordStart - xCoordEnd); i++) {
+        if(board[yCoordStart + i * (yCoordEnd - yCoordStart) / abs(xCoordEnd - xCoordStart)][xCoordStart + i * (xCoordEnd - xCoordStart) / abs(xCoordEnd - xCoordStart)].piece.piece_ID != EMPTY_SQUARE) {
+            return false;
+        }
+    }
 }
 
 //Checks if it is a valid rook move
