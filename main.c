@@ -24,17 +24,17 @@ typedef int PieceIdx;
 
 
 // DE1-SOC FPGA devices base address
-const int* SDRAM_BASE            =0xC0000000;
-const int* FPGA_ONCHIP_BASE      =0xC8000000;
-const int* FPGA_CHAR_BASE        =0xC9000000;
-const int* LEDR_BASE             =0xFF200000;
-const int* HEX3_HEX0_BASE        =0xFF200020;
-const int* HEX5_HEX4_BASE        =0xFF200030;
-const int* SW_BASE               =0xFF200040;
-const int* KEY_BASE              =0xFF200050;
-const int* TIMER_BASE            =0xFF202000;
-const int* PIXEL_BUF_CTRL_BASE   =0xFF203020;
-const int* CHAR_BUF_CTRL_BASE    =0xFF203030;
+const int* SDRAM_BASE            = (int*)0xC0000000;
+const int* FPGA_ONCHIP_BASE      = (int*)0xC8000000;
+const int* FPGA_CHAR_BASE        = (int*)0xC9000000;
+const int* LEDR_BASE             = (int*)0xFF200000;
+const int* HEX3_HEX0_BASE        = (int*)0xFF200020;
+const int* HEX5_HEX4_BASE        = (int*)0xFF200030;
+const int* SW_BASE               = (int*)0xFF200040;
+const int* KEY_BASE              = (int*)0xFF200050;
+const int* TIMER_BASE            = (int*)0xFF202000;
+const int* PIXEL_BUF_CTRL_BASE   = (int*)0xFF203020;
+const int* CHAR_BUF_CTRL_BASE    = (int*)0xFF203030;
 
 
 // VGA colors
@@ -386,6 +386,9 @@ void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
     //Draws the pieces on the chess board
     draw_pieces(board);
 
+    //Swaps the front and back buffers
+    wait_for_vsync();
+    pixel_buffer_start = *(int *)PIXEL_BUF_CTRL_BASE;
 }
 
 //Draws background outline of the chess board
@@ -553,7 +556,10 @@ void play_chess() {
 
 //Initializes the chess board to default state
 void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
-    
+
+    //Initialize colour of each square
+    init_colours(board);
+
     //Initialize highlights
     init_highlights(board);
 
