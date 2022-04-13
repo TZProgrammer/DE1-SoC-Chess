@@ -398,7 +398,7 @@ void draw_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
     //Loops through each square on the chess board and draws the square
     for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++){
         for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++){
-            draw_square(board[yCoord][xCoord], yCoord, xCoord);
+            draw_square(board[yCoord][xCoord], xCoord, yCoord);
         }
     }
 }
@@ -471,15 +471,15 @@ void draw_square(GridSquare square, int xCoord, int yCoord) {
     if (square.outlined == 0) 
         draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, BLACK);
     else 
-       draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, MAGENTA);
+        draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, MAGENTA);
 
 
 
     //Draws the square foreground with it's colour depending on the highlighted status
     if (square.highlighted == 0) 
-        draw_square_primitive(startingPixelCoordX + SQUARE_BORDER_SIZE, startingPixelCoordY + SQUARE_BORDER_SIZE, SQUARE_SIZE - SQUARE_BORDER_SIZE/2, square.colour);
+        draw_square_primitive(startingPixelCoordX + SQUARE_BORDER_SIZE, startingPixelCoordY + SQUARE_BORDER_SIZE, SQUARE_SIZE - SQUARE_BORDER_SIZE*2, square.colour);
     else 
-        draw_square_primitive(startingPixelCoordX + SQUARE_BORDER_SIZE, startingPixelCoordY + SQUARE_BORDER_SIZE, SQUARE_SIZE - SQUARE_BORDER_SIZE/2, YELLOW);
+        draw_square_primitive(startingPixelCoordX + SQUARE_BORDER_SIZE, startingPixelCoordY + SQUARE_BORDER_SIZE, SQUARE_SIZE - SQUARE_BORDER_SIZE*2, YELLOW);
 }
 
 //Draws a pawn on the chess board
@@ -949,7 +949,7 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
             init_outlines(board);
 
             //Set the outline of the selected square to true
-            board[yCoord][xCoord].outlined = true;
+            board[userInput[1]][userInput[0]].outlined = true;
 
             //Draw the board
             draw_board(board);
@@ -968,9 +968,6 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
             break;
         }
     }
-
-    //free memory
-
 
     return selectedPiece;
 
@@ -1047,9 +1044,6 @@ void switch_turns(int * currentTurn) {
 
 //Determines if the game is over
 bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
-    
-    //determine king position
-    int* kingPosition = get_king_position(board, currentTurn);
 
     if(is_stalemate(board, currentTurn)) return true;
 
