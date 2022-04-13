@@ -681,6 +681,11 @@ int * get_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int 
 //Checks if a move is valid
 bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn) {
     
+    //Checks if the move is in the board
+    if(xCoordEnd < 0 || xCoordEnd > BOARD_SIZE-1 || yCoordEnd < 0 || yCoordEnd > BOARD_SIZE-1) {
+        return false;
+    }
+
     //Checks if starting square is empty
     if(board[yCoordStart][xCoordStart].piece.piece_ID == EMPTY_SQUARE) {
         return false;
