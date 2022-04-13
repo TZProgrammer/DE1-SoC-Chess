@@ -258,6 +258,9 @@ bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
 //Determines the winner of the game
 int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
 
+//Checks if game ended in stalemate
+bool is_stalemate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn);
+
 /////////////////////////////////////////////////////////////////////
 
 
@@ -998,28 +1001,36 @@ bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
     //determine king position
     int* kingPosition = get_king_position(board, currentTurn);
 
-    //Check if king is in check
-    if(!is_in_check(board, currentTurn)) {
-        
-        //iterate through every piece and see if it can move
-        for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
-            for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
-                if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE) {
-                    if(is_valid_move(board, xCoord, yCoord, kingPosition[0], kingPosition[1], currentTurn)) {
-                        return false;
-                    }
-                }
-            }
-        }
+    if(is_stalemate(board, currentTurn)) return true;
 
-
-    }
 
 }
 
 //Determines the winner of the game
 int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
     return ;
+}
+
+//Checks if game ended in stalemate
+bool is_stalemate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
+
+    //Check if king is in not in check
+    if(!is_in_check(board, currentTurn)) {
+
+        //iterate through every piece and see if it has valid moves
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+                if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE && board[yCoord][xCoord].piece.colour == currentTurn) {
+                    if(has_valid_moves(board, xCoord, yCoord, currentTurn)) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+
+    return true;
+
 }
 
 /////////////////////////////////////////////////////////////////////
