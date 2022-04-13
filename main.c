@@ -93,11 +93,11 @@ typedef struct GridSquare
 
     //Determines if square should be highlighted when drawn
     //Highlighted squares are used to show where a piece can move
-    int highlighted;
+    bool highlighted;
 
     //Determines if square should be outlined when drawn
     //Outlined squares are used to show current selected square
-    int outlined;
+    bool outlined;
 } GridSquare;
 
 
@@ -189,6 +189,9 @@ void init_pieces(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Initializes empty squares in board
 void init_empty_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
+
+//Initializes outlines of the chess grid
+void init_outlines(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
 //Initializes backrank pieces given the board, colour and yCoord
 void init_backrank(GridSquare board[BOARD_SIZE][BOARD_SIZE], int colour, int yCoord);
@@ -483,13 +486,10 @@ void draw_rectangle_primitive(int xPixelCoord, int yPixelCoord, int width, int h
             plot_pixel(xCoord, yCoord, colour);
         }
     }
-
-
 }
 
 //Draws a circle with the center at (x,y) with radius (radius) and colour (colour)
 void draw_circle_primitive(int xPixelCoord, int yPixelCoord, int radius, short int colour) {
-
 
     //Loops through each pixel in the circle and draws it
     for (int xCoord = xPixelCoord - radius; xCoord < xPixelCoord + radius; xCoord++) {
@@ -523,6 +523,9 @@ void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
 
     //Initialize empty squares
     init_empty_squares(board);
+
+    //Initialize outlines
+    init_outlines(board);
 
 }
 
@@ -586,6 +589,18 @@ void init_empty_squares(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
             board[yCoord][xCoord].piece.colour = EMPTY_PIECE;
         }
     } 
+}
+
+//Initializes outlines of the chess grid
+void init_outlines(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
+
+    //Loops through every square and sets the outline to false
+    for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+            board[yCoord][xCoord].outlined = false;
+        }
+    }
+
 }
 
 
