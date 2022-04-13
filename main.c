@@ -853,7 +853,7 @@ bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
 
 //Checks if king is in check
 bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour) {
-    return ;
+    return false;
 }
 
 //Checks if square is empty
