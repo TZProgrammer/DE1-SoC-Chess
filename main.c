@@ -59,6 +59,7 @@ const int RESOLUTION_Y          =240;
 // Global constants for the chess board
 const int BOARD_SIZE            = 8;
 const int SQUARE_SIZE           = 30;
+const int SQUARE_BORDER_SIZE    = 2;
 const int WHITE_PIECE           = 1;
 const int BLACK_PIECE           = 0;
 const int WHITE_SQUARE_COLOUR   = 0xFFFF;
@@ -467,21 +468,18 @@ void draw_square(GridSquare square, int xCoord, int yCoord) {
     int startingPixelCoordY = y_to_pixel(yCoord);
 
     //Draws the background of the square in black if it's not outlined and in magenta if it is
-    if (square.outlined == 0) {
-            draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, BLACK);
-    }
-    else {
-            draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, MAGENTA);
-    }
+    if (square.outlined == 0) 
+        draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, BLACK);
+    else 
+       draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, MAGENTA);
 
 
-    //Draws the square with it's colour depending on the highlighted status
-    if (square.highlighted == 0) {
-        draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, square.colour);
-    }
-    else {
-        draw_square_primitive(startingPixelCoordX, startingPixelCoordY, SQUARE_SIZE, YELLOW);
-    }
+
+    //Draws the square foreground with it's colour depending on the highlighted status
+    if (square.highlighted == 0) 
+        draw_square_primitive(startingPixelCoordX + SQUARE_BORDER_SIZE, startingPixelCoordY + SQUARE_BORDER_SIZE, SQUARE_SIZE - SQUARE_BORDER_SIZE/2, square.colour);
+    else 
+        draw_square_primitive(startingPixelCoordX + SQUARE_BORDER_SIZE, startingPixelCoordY + SQUARE_BORDER_SIZE, SQUARE_SIZE - SQUARE_BORDER_SIZE/2, YELLOW);
 }
 
 //Draws a pawn on the chess board
