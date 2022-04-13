@@ -63,7 +63,7 @@ const int SQUARE_BORDER_SIZE    = 2;
 const int WHITE_PIECE           = 1;
 const int BLACK_PIECE           = 0;
 const int WHITE_SQUARE_COLOUR   = 0xFFFF;
-const int BLACK_SQUARE_COLOUR   = 0x0000;
+const int BLACK_SQUARE_COLOUR   = 0x07E0;
 const int EMPTY_PIECE           =-1;
 const int STALEMATE             =-1;
 	
@@ -1159,7 +1159,7 @@ int* get_input_from_switches() {
 
     //Convert user input to x and y indexes
     userInputArray[0] = userInput & 0x00000007;
-    userInputArray[1] = (userInput & 0x00000070) >> 3;
+    userInputArray[1] = 7-((userInput & 0x00000038) >> 3);
     
     //Get if user sent input to software
     userInputArray[2] = (userInput & 0x00000200) >> 9;
