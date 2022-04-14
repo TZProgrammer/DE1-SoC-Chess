@@ -487,44 +487,112 @@ void draw_square(GridSquare square, int xCoord, int yCoord) {
 
 //Draws a pawn on the chess board
 void draw_pawn(int piece_colour, int xCoord, int yCoord) {
-    
-    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, YELLOW);
+
+    //Convert xCoord and yCoord to pixel coordinates
+    int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-4;
+    int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
+
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,YELLOW);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,4,YELLOW);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+6, 4,4,YELLOW);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+10, 8,4,YELLOW);
+	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+14, 16,4,YELLOW);
 
 }
 
 //Draws a knight on the chess board
 void draw_knight(int piece_colour, int xCoord, int yCoord) {
-    
-    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, RED);
 
+    //Convert xCoord and yCoord to pixel coordinates
+    int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-8;
+    int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
+
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 2,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX+5, startingPixelCoordY, 2,1,RED);
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+1, 10,1,RED);
+    draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+2, 11,1,RED);
+    draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+3, 7,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX+8, startingPixelCoordY+3, 4,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+4, 7,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX+8, startingPixelCoordY+4, 5,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+5, 15,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+6, 15,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+7, 15,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX+14, startingPixelCoordY+8, 3,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX+14, startingPixelCoordY+9, 3,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+8, 15,2,RED);
+	draw_rectangle_primitive(startingPixelCoordX+1, startingPixelCoordY+10, 15,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+11, 10,3,RED);
+	draw_rectangle_primitive(startingPixelCoordX+1, startingPixelCoordY+14, 11,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+15, 13,1,RED);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+16, 14,3,RED);
 }
 
 //Draws a bishop on the chess board
 void draw_bishop(int piece_colour, int xCoord, int yCoord) {
-    
-    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, CYAN);
 
+    //Convert xCoord and yCoord to pixel coordinates
+    int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-2;
+    int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
+
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,CYAN);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,3, CYAN);
+	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+6, 16,4,CYAN);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+10, 8,3,CYAN);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+14, 4,2,CYAN);
+	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+16, 16,3,CYAN);
 }
 
 //Draws a rook on the chess board
 void draw_rook(int piece_colour, int xCoord, int yCoord) {
-    
-    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, MAGENTA);
 
+    //Convert xCoord and yCoord to pixel coordinates
+    int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/4;
+    int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
+
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 3,3,MAGENTA);
+	draw_rectangle_primitive(startingPixelCoordX+6, startingPixelCoordY, 3,3,MAGENTA);
+	draw_rectangle_primitive(startingPixelCoordX+12, startingPixelCoordY, 3,3,MAGENTA);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+3, 15,3,MAGENTA);
+	draw_rectangle_primitive(startingPixelCoordX+3, startingPixelCoordY+6,9,9,MAGENTA);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+15, 15,3,MAGENTA);
+	
 }
 
 //Draws a queen on the chess board
 void draw_queen(int piece_colour, int xCoord, int yCoord) {
-    
-    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, BLUE);
+
+    //Convert xCoord and yCoord to pixel coordinates
+    int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-2;
+    int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
+
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX-4, startingPixelCoordY, 2,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX+6, startingPixelCoordY, 2,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+2, 10,1,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+3, 8,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+5, 4,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+7, 4,6,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+13, 8,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+15, 10,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX-4, startingPixelCoordY+17, 12,2,BLUE);
 
 }
 
 //Draws a king on the chess board
 void draw_king(int piece_colour, int xCoord, int yCoord) {
-    
-    draw_square_primitive(x_to_pixel(xCoord), y_to_pixel(yCoord), 10, PINK);
 
+    //Convert xCoord and yCoord to pixel coordinates
+    int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-2;
+    int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*1;
+
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,PINK);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,3,PINK);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+5, 4,2,PINK);
+	draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+7, 10,4,PINK);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+11, 6,2,PINK);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+13, 4,6,PINK);
+	draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+19, 10,4,PINK);
 }
 
 //Displays the winner of the game
