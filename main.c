@@ -157,6 +157,15 @@ void draw_king(int pieceColour, int xCoord, int yCoord);
 //Displays the winner of the game
 void display_winner(int winner);
 
+//Displays 1 in the HEX display
+void display_white();
+
+//Displays -1 in the HEX display
+void display_black();
+
+//Displays 0 in the HEX display
+void display_draw();
+
 /////////////////////////////////////////////////////////////////////
 
 
@@ -312,8 +321,8 @@ int main(void)
     
 
     //Loop while game is not over and play game
-    //while (!is_game_over(chessBoard, currentTurn)){
-    while (1){
+    while (!is_game_over(chessBoard, currentTurn)){
+
         //Draws the chess board
         draw_board(chessBoard);
 
@@ -332,9 +341,6 @@ int main(void)
 
     //Displays the winner of the game
     display_winner(winner);
-
-    //Set LED to show winner
-    *LEDR_BASE = 0xFF;
 
     return 0;
 }
@@ -610,8 +616,40 @@ void draw_king(int pieceColour, int xCoord, int yCoord) {
 
 //Displays the winner of the game
 void display_winner(int winner) {
-    return ;
+    
+    if     (winner == WHITE_PIECE) display_white();
+    else if(winner == BLACK_PIECE) display_black();
+    else if(winner == STALEMATE)   display_draw();
+
 }
+
+//Displays 2 in the HEX display
+//Lights up left hand side of LEDS
+void display_white() {
+
+    *HEX3_HEX0_BASE = 0x6;
+    *LEDR_BASE      = 0x1F;
+
+}
+
+//Displays -1 in the HEX display
+//Lights up right hand side of LEDS
+void display_black() {
+
+    *HEX3_HEX0_BASE = 0x4006;
+    *LEDR_BASE      = 0x3E0;
+
+}
+
+//Displays 0 in the HEX display
+//Lights up both sides of LEDS
+void display_draw() {
+
+    *HEX3_HEX0_BASE = 0x3F;
+    *LEDR_BASE      = 0x3FF;
+
+}
+
 
 /////////////////////////////////////////////////////////////////////
 
@@ -1230,37 +1268,37 @@ bool is_game_over(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
 
 //Determines the winner of the game
 int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
-    
+
+    //Check if game is in checkmate
+    if(is_checkmate(board, currentTurn)) {
+        return !currentTurn;
+    }
+
     //Check if game is in stalemate
     if(is_stalemate(board, currentTurn)) {
         return STALEMATE;
     }
 
-    //Check if game is in checkmate
-    if(is_checkmate(board, currentTurn)) {
-        return currentTurn;
-    }
-
-    return 0;
+    return 1;
 }
 
 //Checks if game ended in stalemate
 bool is_stalemate(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
 
     //Check if king is in not in check
-    if(!is_in_check(board, currentTurn)) {
+    if(is_in_check(board, !currentTurn)) return false;
 
-        //iterate through every piece and see if it has valid moves
-        for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
-            for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
-                if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE && board[yCoord][xCoord].piece.colour == currentTurn) {
-                    if(has_valid_moves(board, xCoord, yCoord, currentTurn)) {
-                        return false;
-                    }
+    //iterate through every piece and see if it has valid moves
+    for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+        for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+            if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE && board[yCoord][xCoord].piece.colour == currentTurn) {
+                if(has_valid_moves(board, xCoord, yCoord, currentTurn)) {
+                    return false;
                 }
             }
         }
     }
+
 
     return true;
 }
