@@ -24,9 +24,9 @@ typedef int PieceIdx;
 
 
 // DE1-SOC FPGA devices base address
-int* SDRAM_BASE            = (int*)0xC0000000;
-int* FPGA_ONCHIP_BASE      = (int*)0xC8000000;
-int* FPGA_CHAR_BASE        = (int*)0xC9000000;
+int  SDRAM_BASE            = 0xC0000000;
+int  FPGA_ONCHIP_BASE      = 0xC8000000;
+int  FPGA_CHAR_BASE        = 0xC9000000;
 int* LEDR_BASE             = (int*)0xFF200000;
 int* HEX3_HEX0_BASE        = (int*)0xFF200020;
 int* HEX5_HEX4_BASE        = (int*)0xFF200030;
@@ -70,7 +70,8 @@ const int STALEMATE             =-1;
 	
 
 // location of the pixel buffer in SDRAM
-volatile int pixel_buffer_start;
+volatile int  pixel_buffer_start;
+volatile int *pixel_ctrl_ptr = (int*)0xFF203020;
 
 
 
@@ -359,8 +360,6 @@ void clear_screen()
 //Set pixel buffer addresses
 void set_pixel_buffer_addresses(){
 
-    volatile int * pixel_ctrl_ptr = (int *)PIXEL_BUF_CTRL_BASE;
-
     //Set front pixel buffer to start of FPGA On-chip memory
     *(pixel_ctrl_ptr + 1) = FPGA_ONCHIP_BASE;
 
@@ -393,7 +392,7 @@ void draw_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]){
 
     //Swaps the front and back buffers
     wait_for_vsync();
-    pixel_buffer_start = *(int *)PIXEL_BUF_CTRL_BASE;
+    pixel_buffer_start = *(pixel_ctrl_ptr + 1);
 }
 
 //Draws background outline of the chess board
@@ -1231,6 +1230,8 @@ int get_winner(GridSquare board[BOARD_SIZE][BOARD_SIZE], int currentTurn) {
     if(is_checkmate(board, currentTurn)) {
         return currentTurn;
     }
+
+    return 0;
 }
 
 //Checks if game ended in stalemate
@@ -1350,8 +1351,6 @@ int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int pieceColour
 
     //Initialize variables
     int * kingPosition = malloc(sizeof(int) * 2);
-    int xCoord = 0;
-    int yCoord = 0;
 
     //Loop through the board to find the king
     for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
