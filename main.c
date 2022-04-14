@@ -207,6 +207,9 @@ void highlight_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord,
 //Checks if a move is valid
 bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
 
+//Checks if a move is valid without check
+bool is_valid_move_without_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
+
 //Checks if it is a valid pawn move
 bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
 
@@ -811,38 +814,6 @@ void highlight_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xStarti
 
 //Checks if a move is valid
 bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn) {
-    
-    //Checks if the move is in the board
-    if(xCoordEnd < 0 || xCoordEnd > BOARD_SIZE-1 || yCoordEnd < 0 || yCoordEnd > BOARD_SIZE-1) {
-
-        //set LED 0x10 to true
-        *LEDR_BASE = 0x10;
-        return false;
-    }
-
-    //Checks if starting square is empty
-    if(board[yCoordStart][xCoordStart].piece.piece_ID == EMPTY_SQUARE) {
-
-        //set LED 0x20 to true
-        *LEDR_BASE = 0x20;
-        return false;
-    }
-
-    //Checks if ending square has piece of the same colour as the piece in the starting square
-    if(board[yCoordStart][xCoordStart].piece.colour == board[yCoordEnd][xCoordEnd].piece.colour) {
-
-        //set LED 0x30 to true
-        *LEDR_BASE = 0x30;
-        return false;
-    }
-
-    //Checks if the piece in the starting square is of the same colour as currentTurn
-    if(board[yCoordStart][xCoordStart].piece.colour != currentTurn) {
-        
-        //set LED 0x40 to true
-        *LEDR_BASE = 0x40;
-        return false;
-    }
 
     //Checks if the king would be in check after the move
 
@@ -858,9 +829,33 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
 
     //Check if the king would be in check after the move
     if(is_in_check(tempBoard, currentTurn)) {
+        return false;
+    }
 
-        //set LED 0x50 to true
-        *LEDR_BASE = 0x50;
+    //Checks if the move is a valid move without check
+    return is_valid_move_without_check(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd, currentTurn);
+}
+
+//Checks if a move is valid without check
+bool is_valid_move_without_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn) {
+
+    //Checks if the move is in the board
+    if(xCoordEnd < 0 || xCoordEnd > BOARD_SIZE-1 || yCoordEnd < 0 || yCoordEnd > BOARD_SIZE-1) {
+        return false;
+    }
+
+    //Checks if starting square is empty
+    if(board[yCoordStart][xCoordStart].piece.piece_ID == EMPTY_SQUARE) {
+        return false;
+    }
+
+    //Checks if ending square has piece of the same colour as the piece in the starting square
+    if(board[yCoordStart][xCoordStart].piece.colour == board[yCoordEnd][xCoordEnd].piece.colour) {
+        return false;
+    }
+
+    //Checks if the piece in the starting square is of the same colour as currentTurn
+    if(board[yCoordStart][xCoordStart].piece.colour != currentTurn) {
         return false;
     }
 
@@ -1034,6 +1029,21 @@ bool has_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, 
 
 //Checks if king is in check
 bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int pieceColour) {
+    
+    //Find king position
+    int* kingPosition = get_king_position(board, pieceColour);
+
+    //Check if king is in check
+    for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
+        for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
+            if(board[yCoord][xCoord].piece.piece_ID != EMPTY_SQUARE && board[yCoord][xCoord].piece.piece_ID != KING && board[yCoord][xCoord].piece.piece_ID != pieceColour) {
+                if(is_valid_move_without_check(board, xCoord, yCoord, kingPosition[0], kingPosition[1], !pieceColour)) {
+                    return true;
+                }
+            }
+        }
+    }
+
     return false;
 }
 
