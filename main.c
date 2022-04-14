@@ -826,12 +826,15 @@ bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
         }
 
         //Checks pawn move is moving forward and it's path is free
-        if(board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && yCoordEnd - yCoordStart == -1) {
+        if((board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && yCoordEnd - yCoordStart == -1) && (xCoordEnd == xCoordStart)) {
             return true;
         }
 
         //Checks if pawn is in starting location and moving forward two squares and it's path is free
-        if(yCoordStart == BOARD_SIZE-1 && yCoordEnd == BOARD_SIZE-3 && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && board[yCoordEnd - 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE) {
+        if (yCoordStart == BOARD_SIZE-1 && yCoordEnd == BOARD_SIZE-3 
+            && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE
+            && board[yCoordEnd - 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE
+            && xCoordEnd == xCoordStart) {
             return true;
         }
         
@@ -1053,13 +1056,13 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
             board[move[1]][move[0]].outlined = true;
 
             //Loops through all the squares in the board and set highlighted to true if move is legal
-            // for(int xCoordEnd = 0; xCoordEnd < BOARD_SIZE; xCoordEnd++) {
-            //     for(int yCoordEnd = 0; yCoordEnd < BOARD_SIZE; yCoordEnd++) {
-            //         if(is_valid_move(board, startingLocationX, startingLocationY, xCoordEnd, yCoordEnd, currentTurn)) {
-            //             board[yCoordEnd][xCoordEnd].highlighted = true;
-            //         }
-            //     }
-            //}
+            for(int xCoordEnd = 0; xCoordEnd < BOARD_SIZE; xCoordEnd++) {
+                for(int yCoordEnd = 0; yCoordEnd < BOARD_SIZE; yCoordEnd++) {
+                    if(is_valid_move(board, startingLocationX, startingLocationY, xCoordEnd, yCoordEnd, currentTurn)) {
+                        board[yCoordEnd][xCoordEnd].highlighted = true;
+                    }
+                }
+            }
 
             //Draw the board
             draw_board(board);
