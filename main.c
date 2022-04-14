@@ -209,7 +209,7 @@ void highlight_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord,
 bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
 
 //Checks if it is a valid pawn move
-bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
+bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn);
 
 //Checks if it is a valid knight move
 bool is_valid_knight_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd);
@@ -310,7 +310,8 @@ int main(void)
     
 
     //Loop while game is not over and play game
-    while (!is_game_over(chessBoard, currentTurn)){
+    //while (!is_game_over(chessBoard, currentTurn)){
+    while (1){
         //Draws the chess board
         draw_board(chessBoard);
 
@@ -329,6 +330,11 @@ int main(void)
 
     //Displays the winner of the game
     display_winner(winner);
+
+    //Set LED to show winner
+    *LEDR_BASE = 0xFF;
+
+    return 0;
 }
 
 
@@ -738,21 +744,33 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
     
     //Checks if the move is in the board
     if(xCoordEnd < 0 || xCoordEnd > BOARD_SIZE-1 || yCoordEnd < 0 || yCoordEnd > BOARD_SIZE-1) {
+
+        //set LED 0x10 to true
+        *LEDR_BASE = 0x10;
         return false;
     }
 
     //Checks if starting square is empty
     if(board[yCoordStart][xCoordStart].piece.piece_ID == EMPTY_SQUARE) {
+
+        //set LED 0x20 to true
+        *LEDR_BASE = 0x20;
         return false;
     }
 
     //Checks if ending square has piece of the same colour as the piece in the starting square
     if(board[yCoordStart][xCoordStart].piece.colour == board[yCoordEnd][xCoordEnd].piece.colour) {
+
+        //set LED 0x30 to true
+        *LEDR_BASE = 0x30;
         return false;
     }
 
     //Checks if the piece in the starting square is of the same colour as currentTurn
     if(board[yCoordStart][xCoordStart].piece.colour != currentTurn) {
+        
+        //set LED 0x40 to true
+        *LEDR_BASE = 0x40;
         return false;
     }
 
@@ -770,13 +788,16 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
 
     //Check if the king would be in check after the move
     if(is_in_check(tempBoard, currentTurn)) {
+
+        //set LED 0x50 to true
+        *LEDR_BASE = 0x50;
         return false;
     }
 
     //Checks if the move is valid according to the piece type at starting square
     switch(board[yCoordStart][xCoordStart].piece.piece_ID) {
         case PAWN:
-            return is_valid_pawn_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
+            return is_valid_pawn_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd, currentTurn);
         case ROOK:
             return is_valid_rook_move(board, xCoordStart, yCoordStart, xCoordEnd, yCoordEnd);
         case KNIGHT:
@@ -793,21 +814,46 @@ bool is_valid_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, in
 }
 
 //Checks if it is a valid pawn move
-bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd){
+bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int yCoordStart, int xCoordEnd, int yCoordEnd, int currentTurn){
 
-    //Checks pawn move is moving diagonally and capturing a piece
-    if(board[yCoordEnd][xCoordEnd].piece.piece_ID != EMPTY_SQUARE && abs(xCoordStart - xCoordEnd) == 1 && yCoordEnd - yCoordStart == 1) {
-        return true;
+    //If pawn is white
+    if(board[yCoordStart][xCoordStart].piece.colour == WHITE_PIECE) {
+
+
+        //Checks pawn move is moving diagonally and capturing a piece
+        if(board[yCoordEnd][xCoordEnd].piece.piece_ID != EMPTY_SQUARE && abs(xCoordStart - xCoordEnd) == 1 && yCoordEnd - yCoordStart == -1) {
+            return true;
+        }
+
+        //Checks pawn move is moving forward and it's path is free
+        if(board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && yCoordEnd - yCoordStart == -1) {
+            return true;
+        }
+
+        //Checks if pawn is in starting location and moving forward two squares and it's path is free
+        if(yCoordStart == BOARD_SIZE-1 && yCoordEnd == BOARD_SIZE-3 && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && board[yCoordEnd - 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE) {
+            return true;
+        }
+        
     }
+    
+    //If pawn is black
+    if(board[yCoordStart][xCoordStart].piece.colour == BLACK_PIECE) {
 
-    //Checks pawn move is moving forward and it's path is free
-    if(board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && yCoordEnd - yCoordStart == 1) {
-        return true;
-    }
+        //Checks pawn move is moving diagonally and capturing a piece
+        if(board[yCoordEnd][xCoordEnd].piece.piece_ID != EMPTY_SQUARE && abs(xCoordStart - xCoordEnd) == 1 && yCoordEnd - yCoordStart == 1) {
+            return true;
+        }
 
-    //Checks if pawn is in starting location and moving forward two squares and it's path is free
-    if(yCoordStart == 1 && yCoordEnd == 3 && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && board[yCoordEnd - 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE) {
-        return true;
+        //Checks pawn move is moving forward and it's path is free
+        if(board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && yCoordEnd - yCoordStart == 1) {
+            return true;
+        }
+
+        //Checks if pawn is in starting location and moving forward two squares and it's path is free
+        if(yCoordStart == 1 && yCoordEnd == 3 && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && board[yCoordEnd + 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE) {
+            return true;
+        }
     }
 
     return false;
@@ -982,17 +1028,17 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE], int 
 int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, int startingLocationY, int currentTurn) {
 
     //Initialize variables
-    int * move = malloc(sizeof(int) * 2);
+    int * move;
     int xCoord = 0;
     int yCoord = 0;
 
-    //Set LED 0 to 2 to indicate that the user is selecting a move
-    *LEDR_BASE = 2;
-
     //Loop until valid input is given
     while(true) {
+
+        //Set LED 0 to 2 to indicate that the user is selecting a move
+        *LEDR_BASE = 2;
         
-        int* move = get_input_from_switches();
+        move = get_input_from_switches();
 
         //If the tenth bit is not set, continue polling for input
         if(move[2] == 0) {
@@ -1007,16 +1053,19 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
             board[move[1]][move[0]].outlined = true;
 
             //Loops through all the squares in the board and set highlighted to true if move is legal
-            for(int xCoordEnd = 0; xCoordEnd < BOARD_SIZE; xCoordEnd++) {
-                for(int yCoordEnd = 0; yCoordEnd < BOARD_SIZE; yCoordEnd++) {
-                    if(is_valid_move(board, startingLocationX, startingLocationY, xCoordEnd, yCoordEnd, currentTurn)) {
-                        board[yCoordEnd][xCoordEnd].highlighted = true;
-                    }
-                }
-            }
+            // for(int xCoordEnd = 0; xCoordEnd < BOARD_SIZE; xCoordEnd++) {
+            //     for(int yCoordEnd = 0; yCoordEnd < BOARD_SIZE; yCoordEnd++) {
+            //         if(is_valid_move(board, startingLocationX, startingLocationY, xCoordEnd, yCoordEnd, currentTurn)) {
+            //             board[yCoordEnd][xCoordEnd].highlighted = true;
+            //         }
+            //     }
+            //}
 
             //Draw the board
             draw_board(board);
+
+            //free memory
+            free(move);
 
             continue;
         }
@@ -1026,11 +1075,14 @@ int * get_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int startingLocationX, 
         yCoord = move[1];
 
         //Check if the piece selected is valid
-        if(is_valid_move(board, xCoord, yCoord, startingLocationX, startingLocationY, currentTurn)) {
+        if(is_valid_move(board,startingLocationX, startingLocationY, xCoord, yCoord, currentTurn)) {
             move[0] = xCoord;
             move[1] = yCoord;
             break;
         }
+
+        //free memory
+        free(move);
     }
 
     return move;
