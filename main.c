@@ -175,9 +175,6 @@ void draw_circle_primitive(int xPixelCoord, int yPixelCoord, int radius, short i
 // Function prototypes for the chess game
 /////////////////////////////////////////////////////////////////////
 
-//Enters chess game loop
-void play_chess();
-
 //Initializes the chess board to default state
 void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]);
 
@@ -578,11 +575,6 @@ void draw_circle_primitive(int xPixelCoord, int yPixelCoord, int radius, short i
 
 // Function definitions for the chess game
 /////////////////////////////////////////////////////////////////////
-
-//Enters chess game loop
-void play_chess() {
-    return ;
-}
 
 //Initializes the chess board to default state
 void init_board(GridSquare board[BOARD_SIZE][BOARD_SIZE]) {
@@ -1020,7 +1012,7 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE], int 
         yCoord = userInput[1];
 
         //Check if the piece selected is valid
-        if(!is_empty_square(board, xCoord, yCoord) && board[yCoord][xCoord].piece.colour == currentTurn) {
+        if(!is_empty_square(board, xCoord, yCoord) && board[yCoord][xCoord].piece.colour == currentTurn && has_valid_moves(board, xCoord, yCoord, currentTurn)) {
             selectedPiece[0] = xCoord;
             selectedPiece[1] = yCoord;
             break;
