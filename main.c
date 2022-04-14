@@ -38,11 +38,12 @@ int* CHAR_BUF_CTRL_BASE    = (int*)0xFF203030;
 
 
 // VGA colors
-const int WHITE                 =0xFFFF;
+const int WHITE_SOFT            =0xeeeed2;
+const int WHITE                 =0xffff;
 const int BLACK                 =0x0000;
 const int YELLOW                =0xFFE0;
 const int RED                   =0xF800;
-const int GREEN                 =0x07E0;
+const int GREEN                 =0x769656;
 const int BLUE                  =0x001F;
 const int CYAN                  =0x07FF;
 const int MAGENTA               =0xF81F;
@@ -62,8 +63,8 @@ const int SQUARE_SIZE           = 30;
 const int SQUARE_BORDER_SIZE    = 2;
 const int WHITE_PIECE           = 1;
 const int BLACK_PIECE           = 0;
-const int WHITE_SQUARE_COLOUR   = 0xFFFF;
-const int BLACK_SQUARE_COLOUR   = 0x07E0;
+const int WHITE_SQUARE_COLOUR   =0xeeeed2;
+const int BLACK_SQUARE_COLOUR   =0x769656;
 const int EMPTY_PIECE           =-1;
 const int STALEMATE             =-1;
 	
@@ -135,22 +136,22 @@ void draw_piece(Piece piece, int xCoord, int yCoord);
 void draw_square(GridSquare square, int xCoord, int yCoord);
 
 //Draws a pawn on the chess board
-void draw_pawn(int piece_colour, int xCoord, int yCoord);
+void draw_pawn(int pieceColour, int xCoord, int yCoord);
 
 //Draws a knight on the chess board
-void draw_knight(int piece_colour, int xCoord, int yCoord);
+void draw_knight(int pieceColour, int xCoord, int yCoord);
 
 //Draws a bishop on the chess board
-void draw_bishop(int piece_colour, int xCoord, int yCoord);
+void draw_bishop(int pieceColour, int xCoord, int yCoord);
 
 //Draws a rook on the chess board
-void draw_rook(int piece_colour, int xCoord, int yCoord);
+void draw_rook(int pieceColour, int xCoord, int yCoord);
 
 //Draws a queen on the chess board
-void draw_queen(int piece_colour, int xCoord, int yCoord);
+void draw_queen(int pieceColour, int xCoord, int yCoord);
 
 //Draws a king on the chess board
-void draw_king(int piece_colour, int xCoord, int yCoord);
+void draw_king(int pieceColour, int xCoord, int yCoord);
 
 //Displays the winner of the game
 void display_winner(int winner);
@@ -227,7 +228,7 @@ bool is_valid_king_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
 bool has_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord, int currentTurn);
 
 //Checks if king is in check
-bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour);
+bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int pieceColour);
 
 //Checks if square is empty
 bool is_empty_square(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoord, int yCoord);
@@ -282,7 +283,7 @@ int* get_input_from_switches();
 void copy_board(GridSquare board[BOARD_SIZE][BOARD_SIZE], GridSquare copyBoard[BOARD_SIZE][BOARD_SIZE]);
 
 //Gets king position
-int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour);
+int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int pieceColour);
 
 /////////////////////////////////////////////////////////////////////
 
@@ -442,24 +443,34 @@ void draw_piece(Piece piece, int xCoord, int yCoord) {
         return;
     }
 
+    //Determines colour of piece
+    short int colour;
+    if (piece.colour == WHITE_PIECE) {
+        colour = WHITE;
+    } else {
+        colour = BLACK;
+    }
+
+
+
     //Checks to see which piece to draw and draws it
     if (piece.piece_ID == PAWN) {
-        draw_pawn(piece.colour, xCoord, yCoord);
+        draw_pawn(colour, xCoord, yCoord);
     }
     else if (piece.piece_ID == ROOK) {
-        draw_rook(piece.colour, xCoord, yCoord);
+        draw_rook(colour, xCoord, yCoord);
     }
     else if (piece.piece_ID == KNIGHT) {
-        draw_knight(piece.colour, xCoord, yCoord);
+        draw_knight(colour, xCoord, yCoord);
     }
     else if (piece.piece_ID == BISHOP) {
-        draw_bishop(piece.colour, xCoord, yCoord);
+        draw_bishop(colour, xCoord, yCoord);
     }
     else if (piece.piece_ID == QUEEN) {
-        draw_queen(piece.colour, xCoord, yCoord);
+        draw_queen(colour, xCoord, yCoord);
     }
     else if (piece.piece_ID == KING) {
-        draw_king(piece.colour, xCoord, yCoord);
+        draw_king(colour, xCoord, yCoord);
     }
 }
 
@@ -486,113 +497,113 @@ void draw_square(GridSquare square, int xCoord, int yCoord) {
 }
 
 //Draws a pawn on the chess board
-void draw_pawn(int piece_colour, int xCoord, int yCoord) {
+void draw_pawn(int pieceColour, int xCoord, int yCoord) {
 
     //Convert xCoord and yCoord to pixel coordinates
     int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-4;
     int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
 
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,YELLOW);
-	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,4,YELLOW);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+6, 4,4,YELLOW);
-	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+10, 8,4,YELLOW);
-	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+14, 16,4,YELLOW);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2, pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,4, pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+6, 4,4, pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+10, 8,4, pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+14, 16,4, pieceColour);
 
 }
 
 //Draws a knight on the chess board
-void draw_knight(int piece_colour, int xCoord, int yCoord) {
+void draw_knight(int pieceColour, int xCoord, int yCoord) {
 
     //Convert xCoord and yCoord to pixel coordinates
     int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-8;
     int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
 
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 2,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX+5, startingPixelCoordY, 2,1,RED);
-    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+1, 10,1,RED);
-    draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+2, 11,1,RED);
-    draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+3, 7,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX+8, startingPixelCoordY+3, 4,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+4, 7,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX+8, startingPixelCoordY+4, 5,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+5, 15,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+6, 15,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+7, 15,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX+14, startingPixelCoordY+8, 3,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX+14, startingPixelCoordY+9, 3,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+8, 15,2,RED);
-	draw_rectangle_primitive(startingPixelCoordX+1, startingPixelCoordY+10, 15,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+11, 10,3,RED);
-	draw_rectangle_primitive(startingPixelCoordX+1, startingPixelCoordY+14, 11,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+15, 13,1,RED);
-	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+16, 14,3,RED);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 2,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+5, startingPixelCoordY, 2,1,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+1, 10,1,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+2, 11,1,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+3, 7,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+8, startingPixelCoordY+3, 4,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+4, 7,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+8, startingPixelCoordY+4, 5,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+5, 15,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+6, 15,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+7, 15,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+14, startingPixelCoordY+8, 3,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+14, startingPixelCoordY+9, 3,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+8, 15,2,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+1, startingPixelCoordY+10, 15,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+11, 10,3,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+1, startingPixelCoordY+14, 11,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+15, 13,1,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+16, 14,3,pieceColour);
 }
 
 //Draws a bishop on the chess board
-void draw_bishop(int piece_colour, int xCoord, int yCoord) {
+void draw_bishop(int pieceColour, int xCoord, int yCoord) {
 
     //Convert xCoord and yCoord to pixel coordinates
     int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-2;
     int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
 
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,CYAN);
-	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,3, CYAN);
-	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+6, 16,4,CYAN);
-	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+10, 8,3,CYAN);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+14, 4,2,CYAN);
-	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+16, 16,3,CYAN);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,3, pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+6, 16,4,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+10, 8,3,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+14, 4,2,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-6, startingPixelCoordY+16, 16,3,pieceColour);
 }
 
 //Draws a rook on the chess board
-void draw_rook(int piece_colour, int xCoord, int yCoord) {
+void draw_rook(int pieceColour, int xCoord, int yCoord) {
 
     //Convert xCoord and yCoord to pixel coordinates
     int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/4;
     int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
 
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 3,3,MAGENTA);
-	draw_rectangle_primitive(startingPixelCoordX+6, startingPixelCoordY, 3,3,MAGENTA);
-	draw_rectangle_primitive(startingPixelCoordX+12, startingPixelCoordY, 3,3,MAGENTA);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+3, 15,3,MAGENTA);
-	draw_rectangle_primitive(startingPixelCoordX+3, startingPixelCoordY+6,9,9,MAGENTA);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+15, 15,3,MAGENTA);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 3,3,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+6, startingPixelCoordY, 3,3,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+12, startingPixelCoordY, 3,3,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+3, 15,3,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX+3, startingPixelCoordY+6,9,9,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+15, 15,3,pieceColour);
 	
 }
 
 //Draws a queen on the chess board
-void draw_queen(int piece_colour, int xCoord, int yCoord) {
+void draw_queen(int pieceColour, int xCoord, int yCoord) {
 
     //Convert xCoord and yCoord to pixel coordinates
     int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-2;
     int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*3;
 
-    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX-4, startingPixelCoordY, 2,2,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX+6, startingPixelCoordY, 2,2,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+2, 10,1,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+3, 8,2,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+5, 4,2,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+7, 4,6,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+13, 8,2,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+15, 10,2,BLUE);
-    draw_rectangle_primitive(startingPixelCoordX-4, startingPixelCoordY+17, 12,2,BLUE);
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-4, startingPixelCoordY, 2,2,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX+6, startingPixelCoordY, 2,2,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+2, 10,1,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+3, 8,2,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+5, 4,2,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+7, 4,6,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+13, 8,2,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+15, 10,2,pieceColour);
+    draw_rectangle_primitive(startingPixelCoordX-4, startingPixelCoordY+17, 12,2,pieceColour);
 
 }
 
 //Draws a king on the chess board
-void draw_king(int piece_colour, int xCoord, int yCoord) {
+void draw_king(int pieceColour, int xCoord, int yCoord) {
 
     //Convert xCoord and yCoord to pixel coordinates
     int startingPixelCoordX = x_to_pixel(xCoord)+SQUARE_SIZE/2-2;
     int startingPixelCoordY = y_to_pixel(yCoord)+SQUARE_BORDER_SIZE*1;
 
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,PINK);
-	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,3,PINK);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+5, 4,2,PINK);
-	draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+7, 10,4,PINK);
-	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+11, 6,2,PINK);
-	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+13, 4,6,PINK);
-	draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+19, 10,4,PINK);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY, 4,2,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-2, startingPixelCoordY+2, 8,3,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+5, 4,2,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+7, 10,4,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-1, startingPixelCoordY+11, 6,2,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX, startingPixelCoordY+13, 4,6,pieceColour);
+	draw_rectangle_primitive(startingPixelCoordX-3, startingPixelCoordY+19, 10,4,pieceColour);
 }
 
 //Displays the winner of the game
@@ -1023,7 +1034,7 @@ bool has_valid_moves(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, 
 }
 
 //Checks if king is in check
-bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour) {
+bool is_in_check(GridSquare board[BOARD_SIZE][BOARD_SIZE], int pieceColour) {
     return false;
 }
 
@@ -1335,7 +1346,7 @@ void copy_board(GridSquare board[BOARD_SIZE][BOARD_SIZE], GridSquare copyBoard[B
 }
 
 //Gets king position
-int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colour) {
+int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int pieceColour) {
 
     //Initialize variables
     int * kingPosition = malloc(sizeof(int) * 2);
@@ -1345,7 +1356,7 @@ int* get_king_position(GridSquare board[BOARD_SIZE][BOARD_SIZE], int piece_colou
     //Loop through the board to find the king
     for(int yCoord = 0; yCoord < BOARD_SIZE; yCoord++) {
         for(int xCoord = 0; xCoord < BOARD_SIZE; xCoord++) {
-            if(board[yCoord][xCoord].piece.piece_ID == KING && board[yCoord][xCoord].piece.colour == piece_colour) {
+            if(board[yCoord][xCoord].piece.piece_ID == KING && board[yCoord][xCoord].piece.colour == pieceColour) {
                 kingPosition[0] = xCoord;
                 kingPosition[1] = yCoord;
                 break;
