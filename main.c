@@ -831,10 +831,10 @@ bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
         }
 
         //Checks if pawn is in starting location and moving forward two squares and it's path is free
-        if (yCoordStart == BOARD_SIZE-1 && yCoordEnd == BOARD_SIZE-3 
-            && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE
-            && board[yCoordEnd - 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE
-            && xCoordEnd == xCoordStart) {
+        if ((yCoordStart == BOARD_SIZE-2 && yCoordEnd == BOARD_SIZE-4)
+            && (board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE)
+            && (board[yCoordEnd + 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE)
+            && (xCoordEnd == xCoordStart)) {
             return true;
         }
         
@@ -849,12 +849,15 @@ bool is_valid_pawn_move(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStar
         }
 
         //Checks pawn move is moving forward and it's path is free
-        if(board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && yCoordEnd - yCoordStart == 1) {
+        if(board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && (yCoordEnd - yCoordStart == 1)  && (xCoordEnd == xCoordStart)) {
             return true;
         }
 
         //Checks if pawn is in starting location and moving forward two squares and it's path is free
-        if(yCoordStart == 1 && yCoordEnd == 3 && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE && board[yCoordEnd + 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE) {
+        if(yCoordStart == 1 && yCoordEnd == 3 
+            && board[yCoordEnd][xCoordEnd].piece.piece_ID == EMPTY_SQUARE 
+            && board[yCoordEnd - 1][xCoordEnd].piece.piece_ID == EMPTY_SQUARE
+            && xCoordEnd == xCoordStart) {
             return true;
         }
     }
@@ -1000,6 +1003,9 @@ int * get_selected_piece_location(GridSquare board[BOARD_SIZE][BOARD_SIZE], int 
             //Reset outline of grid squares
             init_outlines(board);
 
+            //Reset highlighted squares
+            init_highlights(board);
+
             //Set the outline of the selected square to true
             board[userInput[1]][userInput[0]].outlined = true;
 
@@ -1114,8 +1120,10 @@ void move_piece(GridSquare board[BOARD_SIZE][BOARD_SIZE], int xCoordStart, int y
     //Move the piece at starting location to end location
     board[yCoordEnd][xCoordEnd].piece = board[yCoordStart][xCoordStart].piece;
 
-    //Set the piece at the starting location to empty
+    //Set the piece at the starting location to empty and colour to empty
     board[yCoordStart][xCoordStart].piece.piece_ID = EMPTY_SQUARE;
+    board[yCoordStart][xCoordStart].piece.colour = EMPTY_PIECE;
+
 }
 
 //Switches turns
